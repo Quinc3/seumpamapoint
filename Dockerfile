@@ -17,9 +17,14 @@ WORKDIR /var/www
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Fix Laravel storage/cache directories BEFORE composer install
+RUN mkdir -p storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-RUN chmod -R 775 storage bootstrap/cache
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 EXPOSE 8080
 
