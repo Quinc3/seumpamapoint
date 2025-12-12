@@ -10,8 +10,12 @@ class PointOfSale extends Page
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
     protected static string $view = 'filament.pages.point-of-sale';
     
-    protected static ?string $navigationGroup = 'Sales';
-    protected static ?int $navigationSort = 1;
+    // HIDDEN FROM NAVBAR
+    protected static bool $shouldRegisterNavigation = false;
+    
+    // Optional: remove group and sort
+    // protected static ?string $navigationGroup = null;
+    // protected static ?int $navigationSort = null;
 
     public static function getNavigationLabel(): string
     {

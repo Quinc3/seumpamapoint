@@ -18,4 +18,9 @@ class EditUser extends EditRecord
                 ->visible(fn() => auth()->user()->hasRole('admin')),
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
