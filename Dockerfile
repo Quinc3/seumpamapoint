@@ -1,13 +1,20 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-cli-alpine
+
 
 RUN apk add --no-cache \
     git curl zip unzip \
     libpng-dev libjpeg-turbo-dev freetype-dev \
     oniguruma-dev libxml2-dev \
-    postgresql-dev nodejs npm
+    postgresql-dev \
+    icu-dev libzip-dev \
+    nodejs npm
+
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring bcmath gd
+ && docker-php-ext-install \
+    pdo pdo_mysql pdo_pgsql \
+    mbstring bcmath gd intl zip
+
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
