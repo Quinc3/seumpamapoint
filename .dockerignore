@@ -1,7 +1,29 @@
-vendor
-node_modules
-storage/logs
-storage/framework/cache
-storage/framework/sessions
-storage/framework/views
+# Exclude problematic folders
+app/Filament/Resources/Backup/
+
+# Exclude development files
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Exclude environment files
 .env
+.env.local
+.env.*.local
+
+# Exclude storage and cache
+storage/*.key
+storage/framework/cache/data/
+storage/logs/
+storage/debugbar/
+
+# Exclude IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Exclude OS files
+.DS_Store
+Thumbs.db
