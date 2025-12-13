@@ -6,7 +6,10 @@ use App\Http\Controllers\DebugController;
 use App\Http\Controllers\SystemController;
 
 // SYSTEM ROUTES
-Route::get('/', [SystemController::class, 'welcome']);
+// Route::get('/', [SystemController::class, 'welcome']);
+Route ::get('/', function () {
+    return redirect('/admin');
+});
 
 // REPORT ROUTES
 Route::prefix('reports')->group(function () {

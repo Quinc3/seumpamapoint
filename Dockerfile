@@ -1,31 +1,61 @@
 FROM php:8.3-fpm
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
-    unzip \
+    curl \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     libzip-dev \
     libicu-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install intl zip gd pdo pdo_mysql
+    && docker-php-ext-install \
+        pdo_mysql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        intl \
+        zip \
+        opcache
 
+# Install composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www
 
+# Copy application files
 COPY . .
 
-# Fix permissions BEFORE composer install
-RUN mkdir -p storage/framework/cache \
-    storage/framework/sessions \
-    storage/framework/views \
-    bootstrap/cache \
-    && chmod -R 777 storage bootstrap/cache
+# Set permissions
+RUN chown -R www-data:www-data /var/www \
+    && find /var/www -type f -exec chmod 644 {} \; \
+    && find /var/www -type d -exec chmod 755 {} \; \
+    && chmod -R 775 /var/www/storage \
+    && chmod -R 775 /var/www/bootstrap/cache
 
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-EXPOSE 8080
+# Generate application key if not exists
+RUN if [ ! -f .env ]; then \
+        cp .env.example .env && \
+        php artisan key:generate; \
+    fi
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# Optimize Laravel
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
+
+CMD ["php-fpm"]

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2025 at 02:14 PM
+-- Generation Time: Dec 13, 2025 at 06:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,7 +55,8 @@ INSERT INTO `attendances` (`id`, `user_id`, `clock_in`, `clock_out`, `shift`, `l
 (12, 7, '2025-11-03 06:20:18', NULL, 'shift 1', NULL, NULL, 'late', '2025-11-03 06:20:18', '2025-11-03 06:20:18'),
 (13, 7, '2025-11-08 03:04:58', NULL, 'shift 1', NULL, NULL, 'late', '2025-11-08 03:04:58', '2025-11-08 03:04:58'),
 (14, 4, '2025-11-09 08:03:12', NULL, 'shift 2', NULL, NULL, 'late', '2025-11-09 08:03:12', '2025-11-09 08:03:12'),
-(15, 7, '2025-11-29 03:55:56', NULL, 'shift 1', NULL, NULL, 'late', '2025-11-29 03:55:56', '2025-11-29 03:55:56');
+(15, 7, '2025-11-29 03:55:56', NULL, 'shift 1', NULL, NULL, 'late', '2025-11-29 03:55:56', '2025-11-29 03:55:56'),
+(16, 7, '2025-12-13 05:27:47', NULL, 'shift 1', NULL, NULL, 'late', '2025-12-13 05:27:47', '2025-12-13 05:27:47');
 
 -- --------------------------------------------------------
 
@@ -74,9 +75,11 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+('seumpamapoint-cache-livewire-rate-limiter:75a036ac0fdcb20b35ac6fd6a3875ea2dbe60af1', 'i:1;', 1765603619),
+('seumpamapoint-cache-livewire-rate-limiter:75a036ac0fdcb20b35ac6fd6a3875ea2dbe60af1:timer', 'i:1765603619;', 1765603619),
 ('seumpamapoint-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3', 'i:1;', 1765109589),
 ('seumpamapoint-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3:timer', 'i:1765109589;', 1765109589),
-('seumpamapoint-cache-spatie.permission.cache', 'a:3:{s:5:\"alias\";a:0:{}s:11:\"permissions\";a:0:{}s:5:\"roles\";a:0:{}}', 1765195931);
+('seumpamapoint-cache-spatie.permission.cache', 'a:3:{s:5:\"alias\";a:0:{}s:11:\"permissions\";a:0:{}s:5:\"roles\";a:0:{}}', 1765627925);
 
 -- --------------------------------------------------------
 
@@ -711,7 +714,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (4, 'Fariz Afdilah Muhamad', 'fariz@seumpama.com', NULL, '$2y$12$oqsP684ozVLKkf6f1gLxV.FFGHxzbOuFWEhgh5tFmJOg.1YqURHR6', NULL, '2025-10-18 00:41:15', '2025-10-20 07:02:35'),
 (6, 'Febry', 'febry@seumpama.com', NULL, '$2y$12$lBSPwdutH6qRQMxVYDddXOOIJmfAuR3rghd6Fv/eFtanaVXhs2d7y', NULL, '2025-10-19 05:01:50', '2025-10-20 07:05:06'),
-(7, 'Super Admin', 'admin@seumpama.com', NULL, '$2y$12$3KononYdEGLodUsw86Si8uImH0EGq7SMTQd3rA5gaTL1wQmr6ybj2', '7SUQhPoeiCxJ9UXRGnN2cBw1QySeffJCyuxt3hjT2wn1k4cHoTFbbHBfyr9O', '2025-10-20 06:39:59', '2025-11-03 06:28:29'),
+(7, 'Super Admin', 'admin@seumpama.com', '2025-12-12 12:13:48', '$2y$12$7QPDfmHp1M.CCY5df7dq8uJeVYBRt4Ml/XQchqJZjgRqCQDz30Pwu', '7SUQhPoeiCxJ9UXRGnN2cBw1QySeffJCyuxt3hjT2wn1k4cHoTFbbHBfyr9O', '2025-10-20 06:39:59', '2025-12-12 12:14:05'),
 (8, 'Sheva Ardiansyah', 'sheva@seumpama.com', NULL, '$2y$12$b4qLHw1WRMe9Xw068x.oWuexVOqvDGX519y2ahC5AjL1Hzswu4XdS', NULL, '2025-10-20 07:07:23', '2025-10-20 07:07:23'),
 (9, 'Arinda', 'arinda@seumpama.com', '2025-10-20 07:21:04', '$2y$12$lnfAjM48TL0pozD/ghE7DO1jFCtf9qCjHcrpIYtrrjvp21BGhzh/6', NULL, '2025-10-20 07:21:11', '2025-10-20 07:21:11');
 
@@ -917,7 +920,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendances`
 --
 ALTER TABLE `attendances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `categories`
