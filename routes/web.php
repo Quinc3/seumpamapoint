@@ -36,3 +36,7 @@ Route::prefix('system')->group(function () {
     Route::get('/clear-cache', [SystemController::class, 'clearCache']);
     Route::get('/info', [SystemController::class, 'systemInfo']);
 });
+
+// HEALTH CHECK ROUTES
+Route::get('/', fn () => response('OK', 200));
+Route::get('/health', fn () => response()->json(['status'=>'ok']));
