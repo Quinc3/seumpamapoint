@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login(CustomLogin::class)
+            ->login()
             ->databaseNotifications()
             ->brandName('SeumpamaPoint')
             ->brandLogo('')

@@ -1,0 +1,17 @@
+{
+    "name": "Seumpama Point",
+    "short_name": "smpm.int",
+    "start_url": "/index.php",
+    "background_color": "#6777ef",
+    "description": "Seumpama Point management and POS system in a web app",
+    "display": "fullscreen",
+    "theme_color": "#6777ef",
+    "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

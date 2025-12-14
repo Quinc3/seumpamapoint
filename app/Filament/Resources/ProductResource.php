@@ -54,14 +54,14 @@ class ProductResource extends Resource
                                 ->required()
                                 ->numeric()
                                 ->prefix('IDR')
-                                ->step(1000)
+                                ->step(1)
                                 ->minValue(0),
 
                             Forms\Components\TextInput::make('cost_price')
                                 ->label('Cost Price')
                                 ->numeric()
                                 ->prefix('IDR')
-                                ->step(1000)
+                                ->step(1)
                                 ->minValue(0)
                                 ->nullable()
                                 ->helperText('For profit calculation'),
@@ -114,10 +114,10 @@ class ProductResource extends Resource
                                 ->helperText('Max 2MB'),
                         ]),
 
-                    // INGREDIENTS TANPA TOMBOL - CARA YANG BENAR
                     Section::make('Product Ingredients')
                         ->schema([
                             Repeater::make('ingredient_items')
+                                ->label('Ingredients (Optional)')
                                 ->schema([
                                     Select::make('ingredient_id')
                                         ->label('Ingredient')
@@ -126,35 +126,32 @@ class ProductResource extends Resource
                                                 ->orderBy('name')
                                                 ->pluck('name', 'id')
                                         )
+                                        ->searchable()
                                         ->preload()
-                                        ->required()
-                                        ->columnSpan(1)
-                                        ->helperText('Choose ingredient'),
+                                        ->nullable()
+                                        ->helperText('Select an ingredient'),
 
                                     Forms\Components\TextInput::make('quantity')
                                         ->numeric()
-                                        ->required()
                                         ->step(0.1)
                                         ->minValue(0.1)
-                                        ->label('Qty')
+                                        ->nullable()
+                                        ->label('Quantity')
                                         ->suffix(function ($get) {
                                             $ingredientId = $get('ingredient_id');
                                             if ($ingredientId) {
-                                                $ingredient = \App\Models\Ingredient::find($ingredientId);
-                                                return $ingredient?->unit ?? 'unit';
+                                                return \App\Models\Ingredient::find($ingredientId)?->unit ?? 'unit';
                                             }
                                             return 'unit';
                                         })
-                                        ->columnSpan(1)
-                                        ->helperText('Amount'),
+                                        ->helperText('Amount used per product'),
                                 ])
                                 ->columns(2)
-                                ->defaultItems(1)
+                                ->defaultItems(0)
+                                ->addActionLabel('Add Ingredient')
                                 ->reorderable(false)
                                 ->collapsible(false)
-                                ->disableItemCreation()
-                                ->disableItemDeletion()
-                                ->helperText('Select ingredients and quantities'),
+                                ->helperText('Leave empty if this product does not require ingredients'),
                         ])
                         ->collapsible(false),
                 ])->columnSpan(1),

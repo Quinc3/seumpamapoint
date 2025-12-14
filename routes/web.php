@@ -5,6 +5,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\SystemController;
 
+
 // SYSTEM ROUTES
 // Route::get('/', [SystemController::class, 'welcome']);
 Route ::get('/', function () {
@@ -37,6 +38,6 @@ Route::prefix('system')->group(function () {
     Route::get('/info', [SystemController::class, 'systemInfo']);
 });
 
-// HEALTH CHECK ROUTES
-Route::get('/', fn () => response('OK', 200));
-Route::get('/health', fn () => response()->json(['status'=>'ok']));
+// // HEALTH CHECK ROUTES
+// Route::get('/', fn () => response('OK', 200));
+// Route::get('/health', fn () => response()->json(['status'=>'ok']));
