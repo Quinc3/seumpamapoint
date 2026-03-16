@@ -13,7 +13,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class OrderDetailRelationManager extends RelationManager
 {
-    protected static string $relationship = 'OrderDetail';
+    protected static string $relationship = 'items';
 
     public function form(Form $form): Form
     {

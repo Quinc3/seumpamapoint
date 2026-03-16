@@ -129,6 +129,15 @@
     </a>
 
     @if (($active || $activeChildItems) && $childItems)
+        @php
+            $childItems = is_iterable($childItems) ? collect($childItems)->values()->all() : [];
+            $maxChildItems = config('filament.panels.max_sidebar_child_items', 200);
+            if (count($childItems) > $maxChildItems) {
+                \Log::warning('Sidebar child items truncated', ['count' => count($childItems), 'max' => $maxChildItems]);
+                $childItems = array_slice($childItems, 0, $maxChildItems);
+            }
+        @endphp
+
         <ul class="fi-sidebar-sub-group-items flex flex-col gap-y-1">
             @foreach ($childItems as $childItem)
                 <x-filament-panels::sidebar.item

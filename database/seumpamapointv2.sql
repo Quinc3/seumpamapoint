@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2025 at 02:02 PM
+-- Generation Time: Dec 24, 2025 at 09:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,7 +56,9 @@ INSERT INTO `attendances` (`id`, `user_id`, `clock_in`, `clock_out`, `shift`, `l
 (13, 7, '2025-11-08 03:04:58', NULL, 'shift 1', NULL, NULL, 'late', '2025-11-08 03:04:58', '2025-11-08 03:04:58'),
 (14, 4, '2025-11-09 08:03:12', NULL, 'shift 2', NULL, NULL, 'late', '2025-11-09 08:03:12', '2025-11-09 08:03:12'),
 (15, 7, '2025-11-29 03:55:56', NULL, 'shift 1', NULL, NULL, 'late', '2025-11-29 03:55:56', '2025-11-29 03:55:56'),
-(16, 7, '2025-12-13 05:27:47', NULL, 'shift 1', NULL, NULL, 'late', '2025-12-13 05:27:47', '2025-12-13 05:27:47');
+(16, 7, '2025-12-13 05:27:47', NULL, 'shift 1', NULL, NULL, 'late', '2025-12-13 05:27:47', '2025-12-13 05:27:47'),
+(17, 8, '2025-12-16 14:49:47', NULL, 'shift 2', NULL, NULL, 'late', '2025-12-16 14:49:47', '2025-12-16 14:49:47'),
+(18, 7, '2025-12-24 06:11:39', NULL, 'shift 1', NULL, NULL, 'late', '2025-12-24 06:11:39', '2025-12-24 06:11:39');
 
 -- --------------------------------------------------------
 
@@ -75,11 +77,7 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('seumpamapoint-cache-livewire-rate-limiter:75a036ac0fdcb20b35ac6fd6a3875ea2dbe60af1', 'i:1;', 1765626233),
-('seumpamapoint-cache-livewire-rate-limiter:75a036ac0fdcb20b35ac6fd6a3875ea2dbe60af1:timer', 'i:1765626233;', 1765626233),
-('seumpamapoint-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3', 'i:1;', 1765109589),
-('seumpamapoint-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3:timer', 'i:1765109589;', 1765109589),
-('seumpamapoint-cache-spatie.permission.cache', 'a:3:{s:5:\"alias\";a:0:{}s:11:\"permissions\";a:0:{}s:5:\"roles\";a:0:{}}', 1765714395);
+('seumpamapoint-cache-spatie.permission.cache', 'a:3:{s:5:\"alias\";a:0:{}s:11:\"permissions\";a:0:{}s:5:\"roles\";a:0:{}}', 1766649297);
 
 -- --------------------------------------------------------
 
@@ -117,7 +115,7 @@ INSERT INTO `categories` (`id`, `name`, `image`, `is_active`, `created_at`, `upd
 (2, 'Non Koffee', NULL, 1, '2025-10-21 09:38:24', '2025-10-21 09:38:24'),
 (3, 'Food', NULL, 1, '2025-10-21 09:38:37', '2025-10-21 09:38:37'),
 (4, 'Snack', NULL, 1, '2025-10-21 09:38:51', '2025-10-21 09:38:51'),
-(5, 'Accessories', NULL, 0, '2025-10-21 09:39:09', '2025-10-21 09:39:49');
+(5, 'Accessories', NULL, 1, '2025-10-21 09:39:09', '2025-12-24 06:12:44');
 
 -- --------------------------------------------------------
 
@@ -245,32 +243,32 @@ CREATE TABLE `ingredients` (
 --
 
 INSERT INTO `ingredients` (`id`, `name`, `unit`, `stock`, `min_stock`, `cost_per_unit`, `is_active`, `created_at`, `updated_at`) VALUES
-(4, 'Coffee Beans', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(5, 'Espresso Shot', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(6, 'Air', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(7, 'Es Batu', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(8, 'UHT Milk', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(9, 'Oat Milk', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(10, 'Krimer', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(11, 'SKM', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(12, 'Gula Cair', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(13, 'Gula Aren', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(14, 'Coklat Powder', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(15, 'Matcha Powder', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(16, 'Thai Tea Powder', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(17, 'Green Tea Powder', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(18, 'Black Series Powder', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(19, 'Vanilla Liquid', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(20, 'Brown Sugar Liquid', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(21, 'Caramel Liquid', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(22, 'Pandan Liquid', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(23, 'Rum Liquid', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(24, 'Osmanthus Liquid', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(25, 'Soda Water', 'ml', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(26, 'Tea Bag', 'pcs', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(27, 'Lemon Tea Powder', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(28, 'Lemon Kering', 'pcs', 0.00, 0.00, 0.00, 1, NULL, NULL),
-(29, 'Coklat Powder Garnish', 'gram', 0.00, 0.00, 0.00, 1, NULL, NULL);
+(4, 'Coffee Beans', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(5, 'Espresso Shot', 'ml', 10090.00, 100.00, 1000.00, 1, NULL, '2025-12-16 18:01:13'),
+(6, 'Air', 'ml', 9600.00, 100.00, 1000.00, 1, NULL, '2025-12-15 13:51:03'),
+(7, 'Es Batu', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(8, 'UHT Milk', 'ml', 10800.00, 100.00, 1000.00, 1, NULL, '2025-12-16 18:01:13'),
+(9, 'Oat Milk', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(10, 'Krimer', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(11, 'SKM', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(12, 'Gula Cair', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(13, 'Gula Aren', 'ml', 10120.00, 100.00, 1000.00, 1, NULL, '2025-12-16 18:01:13'),
+(14, 'Coklat Powder', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(15, 'Matcha Powder', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(16, 'Thai Tea Powder', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(17, 'Green Tea Powder', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(18, 'Black Series Powder', 'gram', 9990.00, 100.00, 1000.00, 1, NULL, '2025-12-15 10:10:15'),
+(19, 'Vanilla Liquid', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(20, 'Brown Sugar Liquid', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(21, 'Caramel Liquid', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(22, 'Pandan Liquid', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(23, 'Rum Liquid', 'ml', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(24, 'Osmanthus Liquid', 'ml', 9900.00, 100.00, 1000.00, 1, NULL, '2025-12-15 13:51:03'),
+(25, 'Soda Water', 'ml', 9900.00, 100.00, 1000.00, 1, NULL, '2025-12-15 10:10:15'),
+(26, 'Tea Bag', 'pcs', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(27, 'Lemon Tea Powder', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL),
+(28, 'Lemon Kering', 'pcs', 9999.00, 100.00, 1000.00, 1, NULL, '2025-12-15 10:10:15'),
+(29, 'Coklat Powder Garnish', 'gram', 10000.00, 100.00, 1000.00, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -419,7 +417,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (56, '2025_11_02_170737_fix_orders_table_nullable_fields', 34),
 (57, '2025_11_02_170756_remove_unused_columns_from_products', 35),
 (58, '2025_11_03_133500_create_ingredients_table', 35),
-(59, '2025_11_03_133504_create_product_ingredient_table', 35);
+(59, '2025_11_03_133504_create_product_ingredient_table', 35),
+(62, '2025_12_15_162429_add_cash_drawer_opened_at_to_orders_table', 36),
+(63, '2025_12_15_192303_drop_role_column_from_users_table', 37),
+(64, '2025_12_17_093106_add_column_roles_id_to__users_table', 38),
+(65, '2025_12_17_101445_make_user_id_not_null_on_orders_table', 39),
+(66, '2025_12_24_122500_create_print_jobs_table', 40),
+(67, '2025_12_24_123000_add_payment_fields_to_print_jobs_table', 41);
 
 -- --------------------------------------------------------
 
@@ -452,9 +456,14 @@ CREATE TABLE `model_has_roles` (
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 6),
 (1, 'App\\Models\\User', 7),
+(1, 'App\\Models\\User', 13),
 (2, 'App\\Models\\User', 4),
 (2, 'App\\Models\\User', 8),
-(2, 'App\\Models\\User', 9);
+(2, 'App\\Models\\User', 9),
+(2, 'App\\Models\\User', 14),
+(2, 'App\\Models\\User', 15),
+(2, 'App\\Models\\User', 16),
+(2, 'App\\Models\\User', 17);
 
 -- --------------------------------------------------------
 
@@ -498,33 +507,78 @@ CREATE TABLE `orders` (
   `discount_amount` decimal(8,2) NOT NULL DEFAULT 0.00,
   `total_payment` decimal(10,2) NOT NULL,
   `payment_status` enum('paid','unpaid','failed') NOT NULL DEFAULT 'unpaid',
+  `cash_drawer_opened_at` timestamp NULL DEFAULT NULL,
   `cash_received` decimal(12,2) DEFAULT NULL,
   `cash_change` decimal(12,2) DEFAULT NULL,
-  `payment_method` enum('cash','qris','debit') NOT NULL DEFAULT 'qris'
+  `payment_method` enum('cash','qris','debit') NOT NULL DEFAULT 'qris',
+  `user_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `customer_name`, `total_price`, `created_at`, `updated_at`, `status`, `discount`, `discount_amount`, `total_payment`, `payment_status`, `cash_received`, `cash_change`, `payment_method`) VALUES
-(41, NULL, 18000.00, '2025-11-02 03:48:13', '2025-11-02 04:44:28', 'completed', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, 'cash'),
-(42, NULL, 18000.00, '2025-11-02 05:57:15', '2025-11-02 05:57:15', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, 'cash'),
-(43, NULL, 18000.00, '2025-11-02 05:58:38', '2025-11-02 06:22:20', 'completed', 0.00, 0.00, 18000.00, 'paid', 50000.00, NULL, 'cash'),
-(44, NULL, 30000.00, '2025-11-02 06:51:25', '2025-11-02 06:51:25', 'completed', 50.00, 15000.00, 15000.00, 'paid', 50000.00, NULL, 'cash'),
-(45, NULL, 18000.00, '2025-11-02 07:32:27', '2025-11-02 07:32:27', 'new', 0.00, 0.00, 18000.00, 'paid', 50000.00, NULL, 'cash'),
-(46, NULL, 18000.00, '2025-11-02 09:59:48', '2025-11-02 09:59:48', 'completed', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, 'cash'),
-(47, 'Sheva', 90000.00, '2025-11-02 10:17:07', '2025-11-02 10:17:07', 'completed', 0.00, 0.00, 90000.00, 'paid', NULL, NULL, 'cash'),
-(48, 'Sheva', 360000.00, '2025-11-02 10:22:23', '2025-11-02 10:22:23', 'completed', 0.00, 0.00, 360000.00, 'paid', NULL, 0.00, 'qris'),
-(49, 'Fariz', 360000.00, '2025-11-02 10:27:45', '2025-11-02 10:27:45', 'new', 0.00, 0.00, 360000.00, 'paid', NULL, 0.00, 'qris'),
-(50, 'Febry', 360000.00, '2025-11-02 10:34:15', '2025-11-02 10:34:15', 'completed', 0.00, 0.00, 360000.00, 'paid', NULL, 0.00, 'qris'),
-(51, NULL, 18000.00, '2025-11-08 03:10:46', '2025-11-08 03:10:46', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, 0.00, 'qris'),
-(52, 'Febry', 18000.00, '2025-11-08 03:48:30', '2025-11-08 03:48:30', 'new', 2.00, 360.00, 17640.00, 'paid', NULL, 0.00, 'qris'),
-(53, 'Fariz', 360000.00, '2025-11-08 04:01:48', '2025-11-08 04:02:22', 'completed', 0.00, 0.00, 360000.00, 'paid', NULL, NULL, 'cash'),
-(55, 'Fariz', 90000.00, '2025-11-09 06:17:18', '2025-11-09 06:18:13', 'cancelled', 0.00, 0.00, 90000.00, 'paid', 90000.00, 0.00, 'cash'),
-(56, 'Sheva', 90000.00, '2025-11-09 06:23:50', '2025-11-09 06:24:56', 'cancelled', 0.00, 0.00, 90000.00, 'paid', NULL, 0.00, 'qris'),
-(57, 'Sheva', 198000.00, '2025-11-09 06:34:49', '2025-11-09 06:36:41', 'cancelled', 0.00, 0.00, 198000.00, 'paid', 200000.00, 2000.00, 'cash'),
-(58, 'Fariz', 18000.00, '2025-11-29 03:52:41', '2025-11-29 03:52:41', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, 'cash');
+INSERT INTO `orders` (`id`, `customer_name`, `total_price`, `created_at`, `updated_at`, `status`, `discount`, `discount_amount`, `total_payment`, `payment_status`, `cash_drawer_opened_at`, `cash_received`, `cash_change`, `payment_method`, `user_id`) VALUES
+(41, NULL, 18000.00, '2025-11-02 03:48:13', '2025-11-02 04:44:28', 'completed', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, NULL, 'cash', 4),
+(42, NULL, 18000.00, '2025-11-02 05:57:15', '2025-11-02 05:57:15', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, NULL, 'cash', 4),
+(43, NULL, 18000.00, '2025-11-02 05:58:38', '2025-11-02 06:22:20', 'completed', 0.00, 0.00, 18000.00, 'paid', NULL, 50000.00, NULL, 'cash', 4),
+(44, NULL, 30000.00, '2025-11-02 06:51:25', '2025-11-02 06:51:25', 'completed', 50.00, 15000.00, 15000.00, 'paid', NULL, 50000.00, NULL, 'cash', 4),
+(45, NULL, 18000.00, '2025-11-02 07:32:27', '2025-11-02 07:32:27', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, 50000.00, NULL, 'cash', 4),
+(46, NULL, 18000.00, '2025-11-02 09:59:48', '2025-11-02 09:59:48', 'completed', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, NULL, 'cash', 4),
+(47, 'Sheva', 90000.00, '2025-11-02 10:17:07', '2025-11-02 10:17:07', 'completed', 0.00, 0.00, 90000.00, 'paid', NULL, NULL, NULL, 'cash', 4),
+(48, 'Sheva', 360000.00, '2025-11-02 10:22:23', '2025-11-02 10:22:23', 'completed', 0.00, 0.00, 360000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(49, 'Fariz', 360000.00, '2025-11-02 10:27:45', '2025-11-02 10:27:45', 'new', 0.00, 0.00, 360000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(50, 'Febry', 360000.00, '2025-11-02 10:34:15', '2025-11-02 10:34:15', 'completed', 0.00, 0.00, 360000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(51, NULL, 18000.00, '2025-11-08 03:10:46', '2025-11-08 03:10:46', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(52, 'Febry', 18000.00, '2025-11-08 03:48:30', '2025-11-08 03:48:30', 'new', 2.00, 360.00, 17640.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(53, 'Fariz', 360000.00, '2025-11-08 04:01:48', '2025-11-08 04:02:22', 'completed', 0.00, 0.00, 360000.00, 'paid', NULL, NULL, NULL, 'cash', 4),
+(55, 'Fariz', 90000.00, '2025-11-09 06:17:18', '2025-11-09 06:18:13', 'cancelled', 0.00, 0.00, 90000.00, 'paid', NULL, 90000.00, 0.00, 'cash', 4),
+(56, 'Sheva', 90000.00, '2025-11-09 06:23:50', '2025-11-09 06:24:56', 'cancelled', 0.00, 0.00, 90000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(57, 'Sheva', 198000.00, '2025-11-09 06:34:49', '2025-11-09 06:36:41', 'cancelled', 0.00, 0.00, 198000.00, 'paid', NULL, 200000.00, 2000.00, 'cash', 4),
+(58, 'Fariz', 18000.00, '2025-11-29 03:52:41', '2025-11-29 03:52:41', 'new', 0.00, 0.00, 18000.00, 'paid', NULL, NULL, NULL, 'cash', 4),
+(59, 'Fariz', 25000.00, '2025-12-15 09:05:53', '2025-12-15 09:05:53', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 25000.00, 0.00, 'cash', 4),
+(60, 'Fariz', 25000.00, '2025-12-15 09:28:47', '2025-12-15 09:29:19', 'completed', 0.00, 0.00, 25000.00, 'paid', NULL, 30000.00, 5000.00, 'cash', 4),
+(61, 'Fariz', 6000.00, '2025-12-15 09:39:30', '2025-12-15 09:39:30', 'new', 0.00, 0.00, 6000.00, 'paid', NULL, 6000.00, 0.00, 'cash', 4),
+(62, 'Fariz', 6000.00, '2025-12-15 09:43:38', '2025-12-15 09:43:38', 'new', 0.00, 0.00, 6000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(63, 'Fariz', 56000.00, '2025-12-15 09:46:53', '2025-12-15 09:46:53', 'new', 0.00, 0.00, 56000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(64, 'Fariz', 20000.00, '2025-12-15 09:49:10', '2025-12-15 09:50:14', 'completed', 0.00, 0.00, 20000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(65, 'Fariz', 25000.00, '2025-12-15 10:02:53', '2025-12-15 10:02:53', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(66, 'Fariz', 25000.00, '2025-12-15 10:10:15', '2025-12-15 10:10:15', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(67, 'Fariz', 25000.00, '2025-12-15 13:51:03', '2025-12-15 13:51:03', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(68, 'Fariz', 20000.00, '2025-12-15 14:02:41', '2025-12-15 14:02:41', 'new', 0.00, 0.00, 20000.00, 'paid', NULL, 20000.00, 0.00, 'cash', 4),
+(69, 'Fariz', 22000.00, '2025-12-15 14:16:33', '2025-12-15 14:16:33', 'new', 0.00, 0.00, 22000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(70, NULL, 22000.00, '2025-12-15 14:20:12', '2025-12-15 14:20:12', 'new', 0.00, 0.00, 22000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(71, 'Fariz', 6000.00, '2025-12-15 14:25:07', '2025-12-15 14:25:07', 'new', 0.00, 0.00, 6000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(72, 'Fariz', 20000.00, '2025-12-15 14:37:36', '2025-12-15 14:37:36', 'new', 0.00, 0.00, 20000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(73, NULL, 25000.00, '2025-12-15 14:48:27', '2025-12-15 14:48:27', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(74, 'Fariz', 25000.00, '2025-12-15 14:55:47', '2025-12-15 14:55:47', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(75, 'Fariz', 25000.00, '2025-12-15 15:05:19', '2025-12-15 15:05:19', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(76, 'Sheva', 22000.00, '2025-12-16 15:19:38', '2025-12-16 15:19:38', 'new', 100.00, 22000.00, 0.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(77, 'Fariz', 25000.00, '2025-12-16 15:34:54', '2025-12-16 15:34:54', 'new', 70.00, 17500.00, 7500.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(78, NULL, 25000.00, '2025-12-16 15:38:15', '2025-12-16 15:44:24', 'cancelled', 80.00, 20000.00, 5000.00, 'paid', NULL, NULL, 0.00, 'qris', 4),
+(79, 'Fariz', 25000.00, '2025-12-16 16:05:21', '2025-12-16 16:40:43', 'cancelled', 50.00, 12500.00, 12500.00, 'paid', NULL, NULL, NULL, 'qris', 4),
+(80, 'Fariz', 25000.00, '2025-12-16 17:00:21', '2025-12-16 17:00:21', 'new', 0.00, 0.00, 25000.00, 'unpaid', NULL, NULL, NULL, 'qris', 4),
+(81, 'Sheva', 25000.00, '2025-12-16 17:11:55', '2025-12-16 17:11:55', 'new', 30.00, 7500.00, 17500.00, 'paid', NULL, NULL, NULL, 'qris', 4),
+(82, 'Fariz', 6000.00, '2025-12-16 17:44:33', '2025-12-16 17:55:25', 'cancelled', 10.00, 600.00, 5400.00, 'paid', NULL, 50000.00, 27500.00, 'cash', 4),
+(83, 'Sheva', 220000.00, '2025-12-16 17:59:14', '2025-12-16 18:01:13', 'cancelled', 50.00, 110000.00, 110000.00, 'paid', NULL, NULL, NULL, 'qris', 4),
+(84, 'Fariz', 25000.00, '2025-12-17 02:22:31', '2025-12-17 02:22:31', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 50000.00, 25000.00, 'cash', 4),
+(85, 'Sheva', 25000.00, '2025-12-17 02:24:09', '2025-12-17 02:24:09', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, NULL, 'qris', 4),
+(86, 'Sheva', 25000.00, '2025-12-17 02:34:06', '2025-12-17 02:34:06', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, NULL, 'qris', 4),
+(87, 'Sheva', 25000.00, '2025-12-17 02:41:42', '2025-12-17 02:41:42', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, NULL, 'qris', 4),
+(88, 'Sheva', 47000.00, '2025-12-24 05:02:00', '2025-12-24 05:02:00', 'new', 0.00, 0.00, 47000.00, 'paid', NULL, NULL, NULL, 'qris', 7),
+(89, 'fariz', 450000.00, '2025-12-24 05:12:18', '2025-12-24 05:12:18', 'completed', 0.00, 0.00, 450000.00, 'paid', NULL, NULL, NULL, 'qris', 7),
+(90, 'Febry', 150000.00, '2025-12-24 05:18:56', '2025-12-24 05:18:56', 'new', 0.00, 0.00, 150000.00, 'paid', NULL, NULL, NULL, 'qris', 7),
+(91, 'Sheva', 125000.00, '2025-12-24 05:22:43', '2025-12-24 05:22:43', 'new', 0.00, 0.00, 125000.00, 'paid', NULL, NULL, NULL, 'qris', 7),
+(92, NULL, 45000.00, '2025-12-24 06:11:11', '2025-12-24 06:11:11', 'new', 0.00, 0.00, 45000.00, 'paid', NULL, NULL, NULL, 'qris', 7),
+(93, NULL, 25000.00, '2025-12-24 07:06:43', '2025-12-24 07:06:43', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 50000.00, 25000.00, 'cash', 7),
+(94, 'Sheva', 25000.00, '2025-12-24 07:56:01', '2025-12-24 07:56:01', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 50000.00, 25000.00, 'cash', 7),
+(97, 'Test Customer', 25000.00, '2025-12-24 08:04:27', '2025-12-24 08:04:27', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 35000.00, 10000.00, 'cash', 4),
+(98, 'Test Customer', 25000.00, '2025-12-24 08:05:05', '2025-12-24 08:05:05', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 35000.00, 10000.00, 'cash', 4),
+(99, 'Test Customer', 25000.00, '2025-12-24 08:05:26', '2025-12-24 08:05:26', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 35000.00, 10000.00, 'cash', 4),
+(100, 'Test Customer', 25000.00, '2025-12-24 08:06:20', '2025-12-24 08:06:20', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 35000.00, 10000.00, 'cash', 4),
+(101, 'E2E Customer', 25000.00, '2025-12-24 08:09:06', '2025-12-24 08:09:06', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, 35000.00, 10000.00, 'cash', 4),
+(102, 'Fariz', 25000.00, '2025-12-24 08:19:03', '2025-12-24 08:19:03', 'new', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, NULL, 'qris', 7),
+(103, 'Fariz', 25000.00, '2025-12-24 08:25:30', '2025-12-24 08:27:27', 'completed', 0.00, 0.00, 25000.00, 'paid', NULL, NULL, NULL, 'qris', 7);
 
 -- --------------------------------------------------------
 
@@ -542,6 +596,28 @@ CREATE TABLE `order_details` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`id`, `product_id`, `order_id`, `qty`, `price`, `subtotal`, `created_at`, `updated_at`) VALUES
+(3, 14, 79, 1, 25000.00, 25000.00, '2025-12-16 16:40:05', '2025-12-16 16:40:05'),
+(4, 14, 81, 1, 25000.00, 25000.00, '2025-12-16 17:11:55', '2025-12-16 17:11:55'),
+(5, 16, 82, 1, 6000.00, 6000.00, '2025-12-16 17:53:32', '2025-12-16 17:53:32'),
+(6, 15, 83, 10, 22000.00, 220000.00, '2025-12-16 18:00:04', '2025-12-16 18:00:04'),
+(7, 46, 91, 5, 25000.00, 125000.00, '2025-12-24 05:22:43', '2025-12-24 05:22:43'),
+(8, 13, 92, 1, 25000.00, 25000.00, '2025-12-24 06:11:11', '2025-12-24 06:11:11'),
+(9, 17, 92, 1, 20000.00, 20000.00, '2025-12-24 06:11:11', '2025-12-24 06:11:11'),
+(10, 14, 93, 1, 25000.00, 25000.00, '2025-12-24 07:06:43', '2025-12-24 07:06:43'),
+(11, 18, 94, 1, 25000.00, 25000.00, '2025-12-24 07:56:01', '2025-12-24 07:56:01'),
+(12, 13, 97, 1, 25000.00, 25000.00, '2025-12-24 08:04:27', '2025-12-24 08:04:27'),
+(13, 13, 98, 1, 25000.00, 25000.00, '2025-12-24 08:05:05', '2025-12-24 08:05:05'),
+(14, 13, 99, 1, 25000.00, 25000.00, '2025-12-24 08:05:26', '2025-12-24 08:05:26'),
+(15, 13, 100, 1, 25000.00, 25000.00, '2025-12-24 08:06:20', '2025-12-24 08:06:20'),
+(16, 13, 101, 1, 25000.00, 25000.00, '2025-12-24 08:09:06', '2025-12-24 08:09:06'),
+(17, 14, 102, 1, 25000.00, 25000.00, '2025-12-24 08:19:03', '2025-12-24 08:19:03'),
+(18, 13, 103, 1, 25000.00, 25000.00, '2025-12-24 08:25:30', '2025-12-24 08:25:30');
 
 -- --------------------------------------------------------
 
@@ -597,6 +673,41 @@ INSERT INTO `printer_settings` (`id`, `auto_print`, `printer_name`, `printer_con
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `print_jobs`
+--
+
+CREATE TABLE `print_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'pending',
+  `cash_received` decimal(15,2) DEFAULT NULL,
+  `cash_change` decimal(15,2) DEFAULT NULL,
+  `attempts` int(11) NOT NULL DEFAULT 0,
+  `last_attempt_at` timestamp NULL DEFAULT NULL,
+  `error_message` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `print_jobs`
+--
+
+INSERT INTO `print_jobs` (`id`, `order_id`, `status`, `cash_received`, `cash_change`, `attempts`, `last_attempt_at`, `error_message`, `created_at`, `updated_at`) VALUES
+(1, 92, 'processing', NULL, NULL, 1, '2025-12-24 08:05:05', NULL, '2025-12-24 06:11:11', '2025-12-24 08:05:05'),
+(2, 93, 'processing', NULL, NULL, 1, '2025-12-24 08:05:26', NULL, '2025-12-24 07:06:43', '2025-12-24 08:05:26'),
+(3, 94, 'processing', 50000.00, 25000.00, 1, '2025-12-24 08:06:20', NULL, '2025-12-24 07:56:02', '2025-12-24 08:06:20'),
+(4, 97, 'done', 35000.00, 10000.00, 1, '2025-12-24 08:09:07', NULL, '2025-12-24 08:04:27', '2025-12-24 08:09:10'),
+(5, 98, 'failed', 35000.00, 10000.00, 1, '2025-12-24 08:18:19', 'Error: A printer must be specified before printing', '2025-12-24 08:05:05', '2025-12-24 08:18:25'),
+(6, 99, 'failed', 35000.00, 10000.00, 1, '2025-12-24 08:18:25', 'Error: A printer must be specified before printing', '2025-12-24 08:05:26', '2025-12-24 08:18:31'),
+(7, 100, 'processing', 35000.00, 10000.00, 1, '2025-12-24 08:18:32', NULL, '2025-12-24 08:06:20', '2025-12-24 08:18:32'),
+(8, 101, 'failed', 35000.00, 10000.00, 1, '2025-12-24 08:18:38', 'Error: A printer must be specified before printing', '2025-12-24 08:09:06', '2025-12-24 08:18:45'),
+(9, 102, 'failed', NULL, NULL, 1, '2025-12-24 08:19:06', 'Error: A printer must be specified before printing', '2025-12-24 08:19:03', '2025-12-24 08:19:11'),
+(10, 103, 'failed', NULL, NULL, 1, '2025-12-24 08:25:32', 'TypeError: Cannot read properties of undefined (reading \'length\')', '2025-12-24 08:25:30', '2025-12-24 08:25:37');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `products`
 --
 
@@ -619,45 +730,45 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `cost_price`, `stock`, `created_at`, `updated_at`, `image`, `category_id`, `is_active`, `in_stock`) VALUES
-(13, 'Black Flower', 25000.00, 10100.00, 0, '2025-12-13 12:09:30', '2025-12-13 12:09:30', NULL, 1, 1, 1),
-(14, 'Koffie Bunga', 25000.00, 10100.00, 0, '2025-12-13 12:14:13', '2025-12-13 12:14:13', NULL, 1, 1, 1),
-(15, 'Seumpama Kopi', 22000.00, 8700.00, 0, '2025-12-13 12:15:32', '2025-12-13 12:15:32', NULL, 1, 1, 1),
-(16, 'Air Mineral', 6000.00, 3000.00, 0, '2025-12-13 12:18:29', '2025-12-13 12:18:29', NULL, 2, 1, 1),
-(17, 'Americano', 20000.00, 5100.00, 0, '2025-12-13 12:19:39', '2025-12-13 12:19:39', NULL, 1, 1, 1),
-(18, 'Black Lemonade', 25000.00, 10100.00, 0, '2025-12-13 12:21:39', '2025-12-13 12:21:39', NULL, 1, 1, 1),
-(19, 'Black Rum', 25000.00, 10100.00, 0, '2025-12-13 12:22:47', '2025-12-13 12:22:47', NULL, 1, 1, 1),
-(20, 'Cafe Latte', 23000.00, 8700.00, 0, '2025-12-13 12:24:21', '2025-12-13 12:24:21', NULL, 1, 1, 1),
-(21, 'Cappucino', 23000.00, 8700.00, 0, '2025-12-13 12:26:04', '2025-12-13 12:26:04', NULL, 1, 1, 1),
-(22, 'Cireng', 10000.00, 3000.00, 0, '2025-12-13 12:26:35', '2025-12-13 12:26:35', NULL, 4, 1, 1),
-(23, 'Dimsum', 20000.00, 12000.00, 0, '2025-12-13 12:26:58', '2025-12-13 12:26:58', NULL, 4, 1, 1),
-(25, 'Dimsum Mentai', 22000.00, 16000.00, 0, '2025-12-13 12:28:39', '2025-12-13 12:28:39', NULL, 4, 1, 1),
-(26, 'Double Shot', 4000.00, 2000.00, 0, '2025-12-13 12:29:39', '2025-12-13 12:29:39', NULL, 1, 1, 1),
-(27, 'French Fries', 15000.00, 9100.00, 0, '2025-12-13 12:30:09', '2025-12-13 12:30:09', NULL, 4, 1, 1),
-(28, 'Green Tea', 22000.00, 6700.00, 0, '2025-12-13 12:31:00', '2025-12-13 12:31:00', NULL, 2, 1, 1),
-(29, 'Iced Tea', 15000.00, 6000.00, 0, '2025-12-13 12:34:55', '2025-12-13 12:34:55', NULL, 2, 1, 1),
-(30, 'Indomie Double', 18000.00, 11000.00, 0, '2025-12-13 12:35:31', '2025-12-13 12:35:31', NULL, 3, 1, 1),
-(31, 'Indomie Single', 13000.00, 5500.00, 0, '2025-12-13 12:35:55', '2025-12-13 12:35:55', NULL, 3, 1, 1),
-(32, 'V60', 30000.00, 10500.00, 0, '2025-12-13 12:37:22', '2025-12-13 12:37:22', NULL, 1, 1, 1),
-(33, 'Japanese', 30000.00, 10500.00, 0, '2025-12-13 12:38:28', '2025-12-13 12:38:28', NULL, 1, 1, 1),
-(34, 'Koffie Butterscotch', 27000.00, NULL, 0, '2025-12-13 12:39:20', '2025-12-13 12:39:20', NULL, 1, 1, 1),
-(35, 'Koffie Caramel', 27000.00, 10900.00, 0, '2025-12-13 12:40:58', '2025-12-13 12:40:58', NULL, 1, 1, 1),
-(36, 'Koffie Kayu Manis', 27000.00, 10100.00, 0, '2025-12-13 12:42:03', '2025-12-13 12:42:03', NULL, 1, 1, 1),
-(37, 'Koffie Klasik', 20000.00, 8700.00, 0, '2025-12-13 12:43:26', '2025-12-13 12:43:26', NULL, 1, 1, 1),
-(38, 'Koffie Pandan', 27000.00, 10900.00, 0, '2025-12-13 12:44:51', '2025-12-13 12:44:51', NULL, 1, 1, 1),
-(39, 'Korek Api', 10000.00, 6800.00, 0, '2025-12-13 12:45:42', '2025-12-13 12:45:42', NULL, 5, 1, 1),
-(40, 'Lemon Tea', 18000.00, 8000.00, 0, '2025-12-13 12:47:04', '2025-12-13 12:47:04', NULL, 2, 1, 1),
-(41, 'Matcha', 27000.00, NULL, 0, '2025-12-13 12:48:37', '2025-12-13 12:48:37', NULL, 2, 1, 1),
-(42, 'Mie Nyemek', 20000.00, 12500.00, 0, '2025-12-13 12:49:13', '2025-12-13 12:49:13', NULL, 3, 1, 1),
-(43, 'Mix Platter', 20000.00, 13300.00, 0, '2025-12-13 12:49:47', '2025-12-13 12:49:47', NULL, 4, 1, 1),
-(44, 'Otak-otak', 15000.00, 7000.00, 0, '2025-12-13 12:50:05', '2025-12-13 12:50:05', NULL, 4, 1, 1),
-(45, 'Rice Bowl - Chiken Katsu', 25000.00, 15000.00, 0, '2025-12-13 12:50:55', '2025-12-13 12:50:55', NULL, 3, 1, 1),
-(46, 'Rice Bowl - Chiken Karage', 25000.00, 15000.00, 0, '2025-12-13 12:51:26', '2025-12-13 12:51:26', NULL, 3, 1, 1),
-(47, 'Roti Bakar', 18000.00, NULL, 0, '2025-12-13 12:51:48', '2025-12-13 12:51:48', NULL, 4, 1, 1),
-(48, 'Telur', 3000.00, NULL, 0, '2025-12-13 12:52:07', '2025-12-13 12:52:07', NULL, 3, 1, 1),
-(49, 'Thai Tea', 20000.00, 5300.00, 0, '2025-12-13 12:53:36', '2025-12-13 12:53:36', NULL, 2, 1, 1),
-(50, 'Koffee Tubruk', 15000.00, 5000.00, 0, '2025-12-13 12:54:35', '2025-12-13 12:54:35', NULL, 1, 1, 1),
-(51, 'Vanilla Latte', 27000.00, 10900.00, 0, '2025-12-13 12:55:44', '2025-12-13 12:55:44', NULL, 1, 1, 1),
-(52, 'Vietnam Drip', 18000.00, 6500.00, 0, '2025-12-13 12:56:51', '2025-12-13 12:56:51', NULL, 1, 1, 1);
+(13, 'Black Flower', 25000.00, 10100.00, 94, '2025-12-13 12:09:30', '2025-12-24 08:25:30', NULL, 1, 1, 1),
+(14, 'Koffie Bunga', 25000.00, 10100.00, 94, '2025-12-13 12:14:13', '2025-12-24 08:19:03', NULL, 1, 1, 1),
+(15, 'Seumpama Kopi', 22000.00, 8700.00, 98, '2025-12-13 12:15:32', '2025-12-16 18:01:13', NULL, 1, 1, 1),
+(16, 'Air Mineral', 6000.00, 3000.00, 97, '2025-12-13 12:18:29', '2025-12-16 17:55:25', NULL, 2, 1, 1),
+(17, 'Americano', 20000.00, 5100.00, 97, '2025-12-13 12:19:39', '2025-12-24 06:11:11', NULL, 1, 1, 1),
+(18, 'Black Lemonade', 25000.00, 10100.00, 98, '2025-12-13 12:21:39', '2025-12-24 07:56:01', NULL, 1, 1, 1),
+(19, 'Black Rum', 25000.00, 10100.00, 100, '2025-12-13 12:22:47', '2025-12-13 12:22:47', NULL, 1, 1, 1),
+(20, 'Cafe Latte', 23000.00, 8700.00, 100, '2025-12-13 12:24:21', '2025-12-13 12:24:21', NULL, 1, 1, 1),
+(21, 'Cappucino', 23000.00, 8700.00, 100, '2025-12-13 12:26:04', '2025-12-13 12:26:04', NULL, 1, 1, 1),
+(22, 'Cireng', 10000.00, 3000.00, 100, '2025-12-13 12:26:35', '2025-12-13 12:26:35', NULL, 4, 1, 1),
+(23, 'Dimsum', 20000.00, 12000.00, 100, '2025-12-13 12:26:58', '2025-12-13 12:26:58', NULL, 4, 1, 1),
+(25, 'Dimsum Mentai', 22000.00, 16000.00, 100, '2025-12-13 12:28:39', '2025-12-13 12:28:39', NULL, 4, 1, 1),
+(26, 'Double Shot', 4000.00, 2000.00, 100, '2025-12-13 12:29:39', '2025-12-13 12:29:39', NULL, 1, 1, 1),
+(27, 'French Fries', 15000.00, 9100.00, 100, '2025-12-13 12:30:09', '2025-12-13 12:30:09', NULL, 4, 1, 1),
+(28, 'Green Tea', 22000.00, 6700.00, 100, '2025-12-13 12:31:00', '2025-12-13 12:31:00', NULL, 2, 1, 1),
+(29, 'Iced Tea', 15000.00, 6000.00, 100, '2025-12-13 12:34:55', '2025-12-13 12:34:55', NULL, 2, 1, 1),
+(30, 'Indomie Double', 18000.00, 11000.00, 100, '2025-12-13 12:35:31', '2025-12-13 12:35:31', NULL, 3, 1, 1),
+(31, 'Indomie Single', 13000.00, 5500.00, 100, '2025-12-13 12:35:55', '2025-12-13 12:35:55', NULL, 3, 1, 1),
+(32, 'V60', 30000.00, 10500.00, 100, '2025-12-13 12:37:22', '2025-12-13 12:37:22', NULL, 1, 1, 1),
+(33, 'Japanese', 30000.00, 10500.00, 100, '2025-12-13 12:38:28', '2025-12-13 12:38:28', NULL, 1, 1, 1),
+(34, 'Koffie Butterscotch', 27000.00, NULL, 100, '2025-12-13 12:39:20', '2025-12-13 12:39:20', NULL, 1, 1, 1),
+(35, 'Koffie Caramel', 27000.00, 10900.00, 100, '2025-12-13 12:40:58', '2025-12-13 12:40:58', NULL, 1, 1, 1),
+(36, 'Koffie Kayu Manis', 27000.00, 10100.00, 100, '2025-12-13 12:42:03', '2025-12-13 12:42:03', NULL, 1, 1, 1),
+(37, 'Koffie Klasik', 20000.00, 8700.00, 100, '2025-12-13 12:43:26', '2025-12-13 12:43:26', NULL, 1, 1, 1),
+(38, 'Koffie Pandan', 27000.00, 10900.00, 100, '2025-12-13 12:44:51', '2025-12-13 12:44:51', NULL, 1, 1, 1),
+(39, 'Korek Api', 10000.00, 6800.00, 100, '2025-12-13 12:45:42', '2025-12-13 12:45:42', NULL, 5, 1, 1),
+(40, 'Lemon Tea', 18000.00, 8000.00, 100, '2025-12-13 12:47:04', '2025-12-13 12:47:04', NULL, 2, 1, 1),
+(41, 'Matcha', 27000.00, NULL, 100, '2025-12-13 12:48:37', '2025-12-13 12:48:37', NULL, 2, 1, 1),
+(42, 'Mie Nyemek', 20000.00, 12500.00, 100, '2025-12-13 12:49:13', '2025-12-13 12:49:13', NULL, 3, 1, 1),
+(43, 'Mix Platter', 20000.00, 13300.00, 100, '2025-12-13 12:49:47', '2025-12-13 12:49:47', NULL, 4, 1, 1),
+(44, 'Otak-otak', 15000.00, 7000.00, 100, '2025-12-13 12:50:05', '2025-12-13 12:50:05', NULL, 4, 1, 1),
+(45, 'Rice Bowl - Chiken Katsu', 25000.00, 15000.00, 100, '2025-12-13 12:50:55', '2025-12-13 12:50:55', NULL, 3, 1, 1),
+(46, 'Rice Bowl - Chiken Karage', 25000.00, 15000.00, 95, '2025-12-13 12:51:26', '2025-12-24 05:22:43', NULL, 3, 1, 1),
+(47, 'Roti Bakar', 18000.00, NULL, 100, '2025-12-13 12:51:48', '2025-12-13 12:51:48', NULL, 4, 1, 1),
+(48, 'Telur', 3000.00, NULL, 100, '2025-12-13 12:52:07', '2025-12-13 12:52:07', NULL, 3, 1, 1),
+(49, 'Thai Tea', 20000.00, 5300.00, 100, '2025-12-13 12:53:36', '2025-12-13 12:53:36', NULL, 2, 1, 1),
+(50, 'Koffee Tubruk', 15000.00, 5000.00, 100, '2025-12-13 12:54:35', '2025-12-13 12:54:35', NULL, 1, 1, 1),
+(51, 'Vanilla Latte', 27000.00, 10900.00, 100, '2025-12-13 12:55:44', '2025-12-13 12:55:44', NULL, 1, 1, 1),
+(52, 'Vietnam Drip', 18000.00, 6500.00, 100, '2025-12-13 12:56:51', '2025-12-13 12:56:51', NULL, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -820,11 +931,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(4, 'Fariz Afdilah Muhamad', 'fariz@seumpama.com', NULL, '$2y$12$oqsP684ozVLKkf6f1gLxV.FFGHxzbOuFWEhgh5tFmJOg.1YqURHR6', NULL, '2025-10-18 00:41:15', '2025-10-20 07:02:35'),
-(6, 'Febry', 'febry@seumpama.com', NULL, '$2y$12$lBSPwdutH6qRQMxVYDddXOOIJmfAuR3rghd6Fv/eFtanaVXhs2d7y', NULL, '2025-10-19 05:01:50', '2025-10-20 07:05:06'),
-(7, 'Super Admin', 'admin@seumpama.com', '2025-12-12 12:13:48', '$2y$12$7QPDfmHp1M.CCY5df7dq8uJeVYBRt4Ml/XQchqJZjgRqCQDz30Pwu', '7SUQhPoeiCxJ9UXRGnN2cBw1QySeffJCyuxt3hjT2wn1k4cHoTFbbHBfyr9O', '2025-10-20 06:39:59', '2025-12-12 12:14:05'),
-(8, 'Sheva Ardiansyah', 'sheva@seumpama.com', NULL, '$2y$12$b4qLHw1WRMe9Xw068x.oWuexVOqvDGX519y2ahC5AjL1Hzswu4XdS', NULL, '2025-10-20 07:07:23', '2025-10-20 07:07:23'),
-(9, 'Arinda', 'arinda@seumpama.com', '2025-10-20 07:21:04', '$2y$12$lnfAjM48TL0pozD/ghE7DO1jFCtf9qCjHcrpIYtrrjvp21BGhzh/6', NULL, '2025-10-20 07:21:11', '2025-10-20 07:21:11');
+(4, 'Fariz', 'fariz@seumpama.com', '2025-12-16 15:09:00', '$2y$12$oqsP684ozVLKkf6f1gLxV.FFGHxzbOuFWEhgh5tFmJOg.1YqURHR6', NULL, '2025-10-18 00:41:15', '2025-12-16 15:09:05'),
+(6, 'Febry', 'febry@seumpama.com', '2025-12-16 15:03:42', '$2y$12$lBSPwdutH6qRQMxVYDddXOOIJmfAuR3rghd6Fv/eFtanaVXhs2d7y', NULL, '2025-10-19 05:01:50', '2025-12-16 15:03:48'),
+(7, 'Super Admin', 'admin@seumpama.com', '2025-12-12 12:13:48', '$2y$12$7QPDfmHp1M.CCY5df7dq8uJeVYBRt4Ml/XQchqJZjgRqCQDz30Pwu', 'cM8p1bIwkSCj4B35AHDgAnvz46J277PArWIjOIeNh5naYRABxzt4v9U1y5xr', '2025-10-20 06:39:59', '2025-12-12 12:14:05'),
+(8, 'Sheva Ardiansyah', 'sheva@seumpama.com', '2025-12-16 15:08:26', '$2y$12$b4qLHw1WRMe9Xw068x.oWuexVOqvDGX519y2ahC5AjL1Hzswu4XdS', NULL, '2025-10-20 07:07:23', '2025-12-16 15:08:32'),
+(9, 'Arinda', 'arinda@seumpama.com', '2025-10-20 07:21:04', '$2y$12$lnfAjM48TL0pozD/ghE7DO1jFCtf9qCjHcrpIYtrrjvp21BGhzh/6', NULL, '2025-10-20 07:21:11', '2025-10-20 07:21:11'),
+(13, 'David', 'david@seumpama.com', '2025-12-15 12:42:14', '$2y$12$mNKdht5b25TbuP91oKzfjOgZFXxXdYOGg.ZFFOZnmKXOMDF2bkkWW', NULL, '2025-12-15 12:42:23', '2025-12-15 12:42:23'),
+(14, 'Tyas', 'tyas@seumpama.com', '2025-12-16 15:06:15', '$2y$12$fKmOIso7iRLeBuJ6rsDXiuJyqPoajj1eEbmaDrthdwEnhJgg094ZK', NULL, '2025-12-16 15:06:26', '2025-12-16 15:06:26'),
+(15, 'Kasih', 'kasih@seumpama.com', '2025-12-16 15:06:59', '$2y$12$2uVsNXtaZyQhOHR06W3Nlu1Q/z9cU4BchfltebUQV6WrEnyCpzB2W', NULL, '2025-12-16 15:07:12', '2025-12-16 15:07:12'),
+(16, 'Berliana', 'berliana@seumpama.com', '2025-12-16 15:07:24', '$2y$12$cXn3EoexjybFEk9vPaeRveSqNQhdayj6rHbmGzq.AVJ7vjR594Hqe', NULL, '2025-12-16 15:07:32', '2025-12-16 15:07:32'),
+(17, 'Putri', 'putri@seumpama.com', '2025-12-16 15:07:43', '$2y$12$CHr3kCrMZZ.i6sOYT2NrG.WB6993JvtBDEmhClUkCvCzNZdSK2xbS', NULL, '2025-12-16 15:07:53', '2025-12-16 15:07:53');
 
 --
 -- Indexes for dumped tables
@@ -945,7 +1061,8 @@ ALTER TABLE `notifications`
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `orders_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `order_details`
@@ -973,6 +1090,13 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `printer_settings`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `print_jobs`
+--
+ALTER TABLE `print_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `print_jobs_order_id_foreign` (`order_id`);
 
 --
 -- Indexes for table `products`
@@ -1028,7 +1152,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendances`
 --
 ALTER TABLE `attendances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1088,19 +1212,19 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -1113,6 +1237,12 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `printer_settings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `print_jobs`
+--
+ALTER TABLE `print_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -1136,7 +1266,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
@@ -1179,11 +1309,23 @@ ALTER TABLE `model_has_roles`
   ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `order_details`
 --
 ALTER TABLE `order_details`
   ADD CONSTRAINT `order_details_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `order_details_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `print_jobs`
+--
+ALTER TABLE `print_jobs`
+  ADD CONSTRAINT `print_jobs_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `products`

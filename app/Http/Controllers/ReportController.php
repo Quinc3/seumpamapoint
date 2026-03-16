@@ -18,7 +18,10 @@ class ReportController extends Controller
     // DOWNLOAD INVOICE
     public function downloadInvoice(Order $order)
     {
-        $order->load('orderDetails.product');
+        $order->load('items.product', 'user');
+        $cashier = $order->user->name ?? 'Unknown';
+        $customer = $order->customer_name ?? 'Unknown';
+
         $settings = InvoiceSetting::getSettings();
         $printerSettings = PrinterSetting::getSettings();
 
@@ -43,7 +46,7 @@ class ReportController extends Controller
     public function downloadSalesReport(Request $request)
     {
         $orderIds = $request->get('orders', []);
-        $orders = Order::with('orderDetails.product')
+        $orders = Order::with('items.product')
             ->whereIn('id', $orderIds)
             ->get();
 
@@ -62,7 +65,7 @@ class ReportController extends Controller
         $startDate = Carbon::create($year, $month, 1)->startOfMonth();
         $endDate = Carbon::create($year, $month, 1)->endOfMonth();
 
-        $orders = Order::with('orderDetails.product')
+        $orders = Order::with('items.product')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->where('status', 'completed')
             ->get();
@@ -70,7 +73,7 @@ class ReportController extends Controller
         $totalSales = $orders->sum('total_payment');
         $totalOrders = $orders->count();
         $totalProducts = $orders->sum(function ($order) {
-            return $order->orderDetails->sum('qty');
+            return $order->items->sum('qty');
         });
 
         $pdf = Pdf::loadView('reports.monthly-report', compact(
@@ -91,7 +94,7 @@ class ReportController extends Controller
     {
         $date = $request->get('date', now()->format('Y-m-d'));
 
-        $orders = Order::with('orderDetails.product')
+        $orders = Order::with('items.product')
             ->whereDate('created_at', $date)
             ->where('status', 'completed')
             ->get();
@@ -99,7 +102,7 @@ class ReportController extends Controller
         $totalSales = $orders->sum('total_payment');
         $totalOrders = $orders->count();
         $totalProducts = $orders->sum(function ($order) {
-            return $order->orderDetails->sum('qty');
+            return $order->items->sum('qty');
         });
 
         $pdf = Pdf::loadView('reports.daily-report', compact(
@@ -120,7 +123,12 @@ class ReportController extends Controller
         $reportType = $request->get('report_type');
         $format = $request->get('format', 'pdf');
 
-        $query = Order::with('orderDetails.product');
+        $query =  Order::with('items.product.category');
+
+        // Additional filters from report form
+        $reportCategoryId = $request->get('report_category_id');
+        $reportProductId = $request->get('report_product_id');
+
 
         // Apply filters based on report type
         switch ($reportType) {
@@ -153,6 +161,21 @@ class ReportController extends Controller
 
         $orders = $query->where('status', 'completed')->get();
 
+        // Apply product/category filters to result collection if provided (in addition to query filters)
+        if ($reportProductId) {
+            $orders = $orders->filter(function ($order) use ($reportProductId) {
+                return $order->items->contains('product_id', $reportProductId);
+            })->values();
+        }
+
+        if ($reportCategoryId) {
+            $orders = $orders->filter(function ($order) use ($reportCategoryId) {
+                return $order->items->contains(function ($item) use ($reportCategoryId) {
+                    return optional($item->product)->category_id == $reportCategoryId;
+                });
+            })->values();
+        }
+
         // EXCEL EXPORT
         if ($format === 'excel') {
             return Excel::download(new OrdersExport($orders), Str::slug($title) . '.xlsx');
@@ -162,10 +185,44 @@ class ReportController extends Controller
         $totalSales = $orders->sum('total_payment');
         $totalOrders = $orders->count();
         $totalProducts = $orders->sum(function ($order) {
-            return $order->orderDetails->sum('qty');
+            return $order->items->sum('qty');
         });
 
-        $pdf = Pdf::loadView('reports.sales-report', compact('orders', 'title', 'totalSales', 'totalOrders', 'totalProducts'));
+        // Build per-product and per-category breakdowns
+        $productTotals = [];
+        $categoryTotals = [];
+
+        foreach ($orders as $order) {
+            foreach ($order->items as $item) {
+                $pid = $item->product_id;
+                $pname = $item->product->name ?? 'Unknown';
+                $cid = $item->product->category_id ?? null;
+                $cname = $item->product->category->name ?? 'Unknown';
+
+                if (!isset($productTotals[$pid])) {
+                    $productTotals[$pid] = ['id' => $pid, 'name' => $pname, 'qty' => 0, 'sales' => 0];
+                }
+                $productTotals[$pid]['qty'] += $item->qty;
+                $productTotals[$pid]['sales'] += $item->subtotal;
+
+                if ($cid) {
+                    if (!isset($categoryTotals[$cid])) {
+                        $categoryTotals[$cid] = ['id' => $cid, 'name' => $cname, 'qty' => 0, 'sales' => 0];
+                    }
+                    $categoryTotals[$cid]['qty'] += $item->qty;
+                    $categoryTotals[$cid]['sales'] += $item->subtotal;
+                }
+            }
+        }
+
+        // Sort breakdowns by sales desc
+        $productTotals = array_values($productTotals);
+        usort($productTotals, function ($a, $b) { return $b['sales'] <=> $a['sales']; });
+
+        $categoryTotals = array_values($categoryTotals);
+        usort($categoryTotals, function ($a, $b) { return $b['sales'] <=> $a['sales']; });
+
+        $pdf = Pdf::loadView('reports.sales-report', compact('orders', 'title', 'totalSales', 'totalOrders', 'totalProducts', 'productTotals', 'categoryTotals', 'reportCategoryId', 'reportProductId'));
         $pdf->setPaper('a4', 'landscape');
 
         return $pdf->download(Str::slug($title) . '.pdf');

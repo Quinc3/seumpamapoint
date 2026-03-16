@@ -3,7 +3,7 @@
 return [
 
     'name' => 'Seumpama Point',
-    'short_name' => 'smpm.int',
+    'short_name' => 'Seumpama Point',
     'start_url' => '/admin',
     'display' => 'standalone',
     'background_color' => '#ffffff',

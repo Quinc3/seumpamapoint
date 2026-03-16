@@ -4,11 +4,30 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DebugController;
 use App\Http\Controllers\SystemController;
+use App\Http\Controllers\PrintController;
+use App\Http\Controllers\AttendanceReportController;
+
+Route::get('/print/invoice/{order}', [PrintController::class, 'invoice'])
+    ->name('print.invoice');
+
+// Provide a named `login` route that redirects to Filament admin login
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
+
+// Print job endpoints for admin clients (polling QZ Tray clients)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/print/pending', [\App\Http\Controllers\PrintJobController::class, 'pending']);
+    Route::post('/admin/print/{job}/complete', [\App\Http\Controllers\PrintJobController::class, 'complete']);
+    Route::get('/admin/print/last', [\App\Http\Controllers\PrintJobController::class, 'last']);
+});
+
+// Duplicate closure route removed: `print.invoice` handled by `PrintController`
 
 
 // SYSTEM ROUTES
 // Route::get('/', [SystemController::class, 'welcome']);
-Route ::get('/', function () {
+Route::get('/', function () {
     return redirect('/admin');
 });
 
@@ -37,6 +56,10 @@ Route::prefix('system')->group(function () {
     Route::get('/clear-cache', [SystemController::class, 'clearCache']);
     Route::get('/info', [SystemController::class, 'systemInfo']);
 });
+
+// ATTENDANCE REPORT ROUTE
+Route::get('/reports/attendance', [AttendanceReportController::class, 'download'])
+    ->name('attendance.report.download');
 
 // // HEALTH CHECK ROUTES
 // Route::get('/', fn () => response('OK', 200));

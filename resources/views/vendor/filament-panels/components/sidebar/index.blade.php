@@ -5,6 +5,13 @@
 @php
     $openSidebarClasses = 'fi-sidebar-open w-[--sidebar-width] translate-x-0 shadow-xl ring-1 ring-gray-950/5 dark:ring-white/10 rtl:-translate-x-0';
     $isRtl = __('filament-panels::layout.direction') === 'rtl';
+    // Normalize and guard navigation to prevent excessive groups causing long renders
+    $navigation = is_iterable($navigation) ? collect($navigation)->values()->all() : [];
+    $maxSidebarGroups = config('filament.panels.max_sidebar_groups', 100);
+    if (count($navigation) > $maxSidebarGroups) {
+        \Log::warning('Sidebar groups truncated', ['count' => count($navigation), 'max' => $maxSidebarGroups]);
+        $navigation = array_slice($navigation, 0, $maxSidebarGroups);
+    }
 @endphp
 
 {{-- format-ignore-start --}}

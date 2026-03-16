@@ -40,8 +40,7 @@ class OrderResource extends Resource
     // Method untuk cek permission create
     public static function canCreate(): bool
     {
-        $user = auth()->user();
-        return $user && $user->hasRole('admin');
+        return auth()->check();
     }
 
     // Method untuk cek permission edit
@@ -58,12 +57,17 @@ class OrderResource extends Resource
         return $user && $user->hasRole('admin');
     }
 
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Grid::make(3)
                     ->schema([
+                        Hidden::make('user_id')
+                            ->default(fn() => auth()->id())
+                            ->required()
+                            ->dehydrated(true),
                         Section::make('Order Details')
                             ->schema([
 
@@ -73,14 +77,31 @@ class OrderResource extends Resource
                                     ->maxLength(255)
                                     ->columnSpanFull(),
 
+                                // Category selector (choose before adding products)
+                                Select::make('category_id')
+                                    ->label('Category')
+                                    ->placeholder('Select category to filter products...')
+                                    ->options(Category::pluck('name', 'id'))
+                                    ->searchable()
+                                    ->reactive(),
+
                                 // Quick Add Product
                                 Select::make('quick_add')
                                     ->label('Add Product')
                                     ->placeholder('Select product...')
-                                    ->options(Product::where('stock', '>', 0)->pluck('name', 'id'))
                                     ->searchable()
                                     ->reactive()
-                                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                    ->options(function (callable $get) {
+                                        $query = Product::where('stock', '>', 0);
+                                        $category = $get('category_id');
+
+                                        if ($category) {
+                                            $query->where('category_id', $category);
+                                        }
+
+                                        return $query->pluck('name', 'id');
+                                    })
+                                    ->afterStateUpdated(function ($state, $set, $get) {
                                         if (!$state)
                                             return;
 
@@ -125,74 +146,75 @@ class OrderResource extends Resource
                                 // Order Items
                                 Repeater::make('order_items')
                                     ->label('Order Items')
+                                    ->statePath('order_items')
+                                    ->dehydrated(true)
                                     ->schema([
                                         Select::make('product_id')
                                             ->label('Product')
-                                            ->options(Product::where('stock', '>', 0)->pluck('name', 'id'))
                                             ->required()
                                             ->reactive()
-                                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                                                if (!$state)
+                                            ->options(function (callable $get) {
+                                                $query = Product::where('stock', '>', 0);
+                                                $category = $get('category_id');
+
+                                                if ($category) {
+                                                    $query->where('category_id', $category);
+                                                }
+
+                                                return $query->pluck('name', 'id');
+                                            })
+                                            ->afterStateUpdated(function ($state, $set, $get) {
+                                                if (!$state) {
                                                     return;
+                                                }
 
                                                 $product = Product::find($state);
                                                 if ($product) {
                                                     $set('price', $product->price);
                                                     $qty = $get('qty') ?? 1;
                                                     $set('subtotal', $product->price * $qty);
-                                                    self::calculateTotals($set, $get);
                                                 }
-                                            })
-                                            ->columnSpan(2),
+                                            }),
 
                                         TextInput::make('qty')
-                                            ->label('Qty')
                                             ->numeric()
                                             ->default(1)
                                             ->minValue(1)
-                                            ->required()
                                             ->reactive()
-                                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                            ->afterStateUpdated(function ($state, $set, $get) {
                                                 $price = $get('price') ?? 0;
                                                 $set('subtotal', $price * $state);
-                                                self::calculateTotals($set, $get);
                                             }),
 
                                         TextInput::make('price')
-                                            ->label('Price')
                                             ->numeric()
-                                            ->prefix('IDR')
-                                            ->readonly()
-                                            ->required(),
+                                            ->readonly(),
 
                                         TextInput::make('subtotal')
-                                            ->label('Subtotal')
                                             ->numeric()
-                                            ->prefix('IDR')
-                                            ->readonly()
-                                            ->required(),
+                                            ->readonly(),
                                     ])
                                     ->columns(4)
+
                                     ->defaultItems(0)
-                                    ->columnSpanFull()
                                     ->reorderable(false)
-                                    ->createItemButtonLabel('Add Item Manually')
+                                    ->createItemButtonLabel('Add Item')
 
-                                    ->loadStateFromRelationshipsUsing(function (Repeater $component, ?Order $record) {
-                                        if ($record && $record->exists) {
-                                            $orderItems = $record->orderDetails->map(function ($detail) {
-                                                return [
-                                                    'product_id' => $detail->product_id,
-                                                    'qty' => $detail->qty,
-                                                    'price' => $detail->price,
-                                                    'subtotal' => $detail->subtotal,
-                                                ];
-                                            })->toArray();
+                                    ->loadStateFromRelationshipsUsing(function ($component, $record) {
+                                        if (!$record)
+                                            return;
 
-                                            $component->state($orderItems);
-                                        }
-                                    }),
+                                        $component->state(
+                                            $record->items->map(fn($item) => [
+                                                'product_id' => $item->product_id,
+                                                'qty' => $item->qty,
+                                                'price' => $item->price,
+                                                'subtotal' => $item->subtotal,
+                                            ])->toArray()
+                                        );
+                                    })
                             ])
+
                             ->columnSpan(2),
 
                         Section::make('Payment Information')
@@ -202,7 +224,7 @@ class OrderResource extends Resource
                                     ->schema([
                                         Placeholder::make('subtotal_display')
                                             ->label('Subtotal')
-                                            ->content(function (Get $get) {
+                                            ->content(function ($get) {
                                                 $items = $get('order_items') ?? [];
                                                 $subtotal = collect($items)->sum('subtotal');
                                                 return 'IDR ' . number_format($subtotal, 0, ',', '.');
@@ -214,18 +236,30 @@ class OrderResource extends Resource
                                                 TextInput::make('discount')
                                                     ->label('Discount %')
                                                     ->numeric()
-                                                    ->minValue(0)
-                                                    ->maxValue(100)
-                                                    ->default(0)
                                                     ->suffix('%')
+                                                    ->default(0)
                                                     ->reactive()
-                                                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                                    ->afterStateUpdated(function ($state, $set, $get) {
+                                                        // Paksa nilai antara 0–100
+                                                        $value = (int) $state;
+
+                                                        if ($value < 0) {
+                                                            $value = 0;
+                                                        }
+
+                                                        if ($value > 100) {
+                                                            $value = 100;
+                                                        }
+
+                                                        $set('discount', $value);
+
                                                         self::calculateTotals($set, $get);
-                                                    }),
+                                                    })
+                                                ,
 
                                                 Placeholder::make('discount_amount_display')
                                                     ->label('Discount Amount')
-                                                    ->content(function (Get $get) {
+                                                    ->content(function ($get) {
                                                         $items = $get('order_items') ?? [];
                                                         $subtotal = collect($items)->sum('subtotal');
                                                         $discount = $get('discount') ?? 0;
@@ -237,7 +271,7 @@ class OrderResource extends Resource
 
                                         Placeholder::make('total_display')
                                             ->label('TOTAL')
-                                            ->content(function (Get $get) {
+                                            ->content(function ($get) {
                                                 $items = $get('order_items') ?? [];
                                                 $subtotal = collect($items)->sum('subtotal');
                                                 $discount = $get('discount') ?? 0;
@@ -257,10 +291,10 @@ class OrderResource extends Resource
                                                 'qris' => 'QRIS',
                                                 'debit' => 'Debit',
                                             ])
-                                            ->default('cash')
+                                            ->default('qris')
                                             ->required()
                                             ->reactive()
-                                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                            ->afterStateUpdated(function ($state, $set, $get) {
                                                 if ($state !== 'cash') {
                                                     $set('cash_received', null);
                                                     $set('cash_change', 0);
@@ -286,7 +320,7 @@ class OrderResource extends Resource
                                                 // Column 1: Amount to Pay
                                                 Placeholder::make('total_payment_display')
                                                     ->label('Amount to Pay')
-                                                    ->content(function (Get $get) {
+                                                    ->content(function ($get) {
                                                         $items = $get('order_items') ?? [];
                                                         $subtotal = collect($items)->sum('subtotal');
                                                         $discount = $get('discount') ?? 0;
@@ -304,7 +338,7 @@ class OrderResource extends Resource
                                                             ->numeric()
                                                             ->prefix('IDR')
                                                             ->reactive()
-                                                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                                            ->afterStateUpdated(function ($state, $set, $get) {
                                                                 $items = $get('order_items') ?? [];
                                                                 $subtotal = collect($items)->sum('subtotal');
                                                                 $discount = $get('discount') ?? 0;
@@ -319,11 +353,11 @@ class OrderResource extends Resource
 
                                                         Placeholder::make('cash_change_display')
                                                             ->label('Change')
-                                                            ->content(function (Get $get) {
+                                                            ->content(function ($get) {
                                                                 $change = $get('cash_change') ?? 0;
                                                                 return 'IDR ' . number_format($change, 0, ',', '.');
                                                             })
-                                                            ->extraAttributes(function (Get $get) {
+                                                            ->extraAttributes(function ($get) {
                                                                 $change = $get('cash_change') ?? 0;
                                                                 $color = $change >= 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
                                                                 return ['class' => "text-md {$color}"];
@@ -331,7 +365,7 @@ class OrderResource extends Resource
                                                     ]),
                                             ]),
                                     ])
-                                    ->visible(fn(Get $get) => $get('payment_method') === 'cash')
+                                    ->visible(fn($get) => $get('payment_method') === 'cash')
                                     ->compact()
                                     ->collapsible()
                                     ->collapsed(false),
@@ -351,7 +385,7 @@ class OrderResource extends Resource
                                 Toggle::make('open_cash_drawer')
                                     ->label('Open Cash Drawer on save')
                                     ->default(true)
-                                    ->visible(fn(Get $get) => $get('payment_method') === 'cash'),
+                                    ->visible(fn($get) => $get('payment_method') === 'cash'),
 
                                 // Hidden fields for database
                                 Hidden::make('total_price')
@@ -369,6 +403,9 @@ class OrderResource extends Resource
             ]);
     }
 
+
+
+
     protected static function calculateTotals(Set $set, Get $get): void
     {
         $items = $get('order_items') ?? [];
@@ -382,164 +419,45 @@ class OrderResource extends Resource
         $set('total_payment', $totalPayment);
     }
 
-    protected static function afterCreate(Order $order, array $data): void
+
+    protected static function syncitems(Order $order, array $data): void
     {
-
-        \Log::info("🎯 AFTER CREATE CALLED for order: " . $order->id);
-        \Log::info("📦 Order data:", $data);
-
-        self::saveOrderDetails($order, $data);
-
-        // Auto print jika status paid
-        if ($order->payment_status === 'paid') {
-            \Log::info("🎯 NEW ORDER CREATED AS PAID - Triggering auto print for order: " . $order->id);
-            event(new OrderPaid($order));
-        }
-
-        // Auto open cash drawer jika cash payment
-        if (($data['payment_method'] ?? null) === 'cash' && ($data['open_cash_drawer'] ?? true)) {
-            \Log::info("💰 OPENING CASH DRAWER for order: " . $order->id);
-            self::openCashDrawer();
-        }
-    }
-
-
-    protected static function afterSave(Order $order, array $data): void
-    {
-        self::saveOrderDetails($order, $data);
-
-        // Auto print jika status berubah ke paid
-        $originalStatus = $order->getOriginal('payment_status');
-        $newStatus = $data['payment_status'] ?? $order->payment_status;
-
-        if ($originalStatus !== 'paid' && $newStatus === 'paid') {
-            \Log::info("🎯 PAYMENT STATUS CHANGED TO PAID - Triggering auto print for order: " . $order->id);
-            event(new OrderPaid($order));
-        }
-
-        // Auto open cash drawer jika cash payment
-        if (($data['payment_method'] ?? null) === 'cash' && ($data['open_cash_drawer'] ?? true)) {
-            \Log::info("💰 OPENING CASH DRAWER for order: " . $order->id);
-            self::openCashDrawer();
-        }
-    }
-
-    protected static function saveOrderDetails(Order $order, array $data): void
-    {
-        $order->orderDetails()->delete();
-
-        \Log::info("💾 SAVING ORDER DETAILS - Data:", [
-            'order_items' => $data['order_items'] ?? 'NO ITEMS',
-            'count' => count($data['order_items'] ?? [])
-        ]);
-
-        if (isset($data['order_items']) && is_array($data['order_items'])) {
-            foreach ($data['order_items'] as $item) {
-                if (!empty($item['product_id']) && !empty($item['qty'])) {
-                    \Log::info("➕ Creating order detail:", $item);
-
-                    // Create order detail
-                    OrderDetail::create([
-                        'order_id' => $order->id,
-                        'product_id' => $item['product_id'],
-                        'qty' => $item['qty'],
-                        'price' => $item['price'],
-                        'subtotal' => $item['subtotal'],
-                    ]);
-
-                    // DECREMENT STOCK dengan debug lengkap
-                    $product = Product::find($item['product_id']);
-                    if ($product) {
-                        \Log::info("📦 BEFORE DECREMENT - Product: " . $product->name . ", Stock: " . $product->stock . ", Qty to decrement: " . $item['qty']);
-
-                        // DECREMENT STOCK
-                        $product->decrement('stock', $item['qty']);
-
-                        // RELOAD product untuk get updated stock
-                        $product->refresh();
-
-                        \Log::info("📦 AFTER DECREMENT - Product: " . $product->name . ", Stock: " . $product->stock);
-
-                        // Update in_stock status
-                        if ($product->stock <= 0) {
-                            $product->update(['in_stock' => false]);
-                            \Log::info("🔄 Product marked as out of stock: " . $product->name);
-                        }
-                    } else {
-                        \Log::error("❌ Product not found for ID: " . $item['product_id']);
-                    }
-                }
+        // 1. BALIKIN STOK LAMA
+        foreach ($order->items as $detail) {
+            if ($detail->product) {
+                $detail->product->increment('stock', $detail->qty);
+                $detail->product->update(['in_stock' => true]);
             }
         }
 
-        \Log::info("✅ Order details saved for order: " . $order->id, [
-            'items_count' => $order->orderDetails()->count(),
-            'items' => $order->orderDetails->map(fn($d) => [
-                'product' => $d->product->name ?? 'Unknown',
-                'qty' => $d->qty,
-                'subtotal' => $d->subtotal
-            ])->toArray()
-        ]);
-    }
+        // 2. HAPUS DETAIL LAMA
+        $order->items()->delete();
 
-    protected static function beforeCreate(array $data): array
-    {
-        Log::info("🎯 BEFORE CREATE - Saving order_items to session", [
-            'order_items_count' => count($data['order_items'] ?? []),
-            'order_items' => $data['order_items'] ?? []
-        ]);
+        // 3. SIMPAN DETAIL BARU + KURANGI STOK
+        foreach ($data['order_items'] ?? [] as $item) {
+            if (empty($item['product_id']) || empty($item['qty'])) {
+                continue;
+            }
 
-        // Simpan order_items ke session untuk diakses oleh observer
-        session(['current_order_items' => $data['order_items'] ?? []]);
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'product_id' => $item['product_id'],
+                'qty' => $item['qty'],
+                'price' => $item['price'],
+                'subtotal' => $item['subtotal'],
+            ]);
 
-        return $data;
-    }
+            $product = Product::find($item['product_id']);
+            if ($product) {
+                $product->decrement('stock', $item['qty']);
 
-    public function handle(OrderPaid $event)
-    {
-        \Log::info("🎯 AutoPrintInvoice DIPANGGIL untuk order: " . $event->order->id);
-
-        // Load relationship dengan product
-        $event->order->load(['orderDetails.product']);
-
-        \Log::info("📦 Data order sebelum print:", [
-            'details_count' => $event->order->orderDetails->count(),
-            'items' => $event->order->orderDetails->map(fn($d) => [
-                'product' => $d->product->name ?? 'NO PRODUCT',
-                'qty' => $d->qty,
-                'subtotal' => $d->subtotal
-            ])->toArray()
-        ]);
-
-        $printerSettings = \App\Models\PrinterSetting::getSettings();
-
-    }
-
-    protected static function openCashDrawer(): void
-    {
-        try {
-            // ESC/POS Command untuk buka cash drawer
-            $printerIp = config('printing.cash_drawer_ip', '192.168.1.100');
-            $printerPort = config('printing.cash_drawer_port', 9100);
-
-            $command = chr(27) . chr(112) . chr(0) . chr(100) . chr(100); // ESC/POS command
-
-            // Kirim command ke printer via socket
-            $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-            if ($socket !== false) {
-                $result = socket_connect($socket, $printerIp, $printerPort);
-                if ($result !== false) {
-                    socket_write($socket, $command, strlen($command));
-                    socket_close($socket);
-                    \Log::info("✅ Cash drawer opened successfully");
-                } else {
-                    \Log::error("❌ Failed to connect to cash drawer");
+                if ($product->stock <= 0) {
+                    $product->update(['in_stock' => false]);
                 }
             }
-        } catch (\Exception $e) {
-            \Log::error("❌ Cash drawer error: " . $e->getMessage());
         }
     }
+
 
     public static function table(Table $table): Table
     {
@@ -580,7 +498,6 @@ class OrderResource extends Resource
                     ->selectablePlaceholder(false),
             ])
             ->defaultSort('created_at', 'desc')
-            ->modifyQueryUsing(fn(Builder $query) => $query->whereDate('created_at', today()))
             ->filters([
                 Filter::make('created_at')
                     ->form([
@@ -689,6 +606,29 @@ class OrderResource extends Resource
                             ->label('End Date')
                             ->visible(fn($get) => $get('report_type') === 'custom'),
 
+                        Select::make('report_category_id')
+                            ->label('Category')
+                            ->placeholder('Filter by category')
+                            ->options(Category::pluck('name', 'id'))
+                            ->searchable()
+                            ->reactive(),
+
+                        Select::make('report_product_id')
+                            ->label('Product')
+                            ->placeholder('Filter by product')
+                            ->searchable()
+                            ->reactive()
+                            ->options(function (callable $get) {
+                                $query = Product::query();
+                                $category = $get('report_category_id');
+
+                                if ($category) {
+                                    $query->where('category_id', $category);
+                                }
+
+                                return $query->pluck('name', 'id');
+                            }),
+
                         Select::make('format')
                             ->label('Format')
                             ->options([
@@ -717,7 +657,7 @@ class OrderResource extends Resource
                         $record->update(['status' => 'cancelled']);
 
                         // Return stok produk dan bahan baku
-                        foreach ($record->orderDetails as $orderDetail) {
+                        foreach ($record->items()->get() as $orderDetail) {
                             $product = $orderDetail->product;
 
                             if ($product) {
@@ -748,6 +688,15 @@ class OrderResource extends Resource
                         \Log::info("✅ ORDER CANCELLED SUCCESSFULLY - Order: " . $record->id);
                     })
                     ->visible(fn(Order $record) => $record->status !== 'cancelled'), // Hanya tampil jika belum cancelled
+
+                Action::make('print')
+                    ->label('Print')
+                    ->icon('heroicon-o-printer')
+                    ->color('primary')
+                    ->url(fn(Order $record) => route('download.invoice', $record))
+                    ->openUrlInNewTab(),
+
+
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -769,7 +718,7 @@ class OrderResource extends Resource
 
                             $record->update(['status' => 'cancelled']);
 
-                            foreach ($record->orderDetails as $orderDetail) {
+                            foreach ($record->items as $orderDetail) {
                                 $product = $orderDetail->product;
 
                                 if ($product) {
@@ -790,6 +739,54 @@ class OrderResource extends Resource
                         }
 
                         \Log::info("✅ BULK CANCELLATION COMPLETED - " . count($records) . " orders cancelled");
+                    })
+                    ->deselectRecordsAfterCompletion(),
+
+                // Bulk change status to any chosen status
+                Tables\Actions\BulkAction::make('change_status')
+                    ->label('Change Status')
+                    ->form([
+                        Select::make('status')
+                            ->label('New Status')
+                            ->options([
+                                'new' => 'New',
+                                'processing' => 'Processing',
+                                'completed' => 'Completed',
+                                'cancelled' => 'Cancelled',
+                            ])
+                            ->required(),
+                    ])
+                    ->action(function ($records, $data) {
+                        $newStatus = $data['status'] ?? null;
+                        if (!$newStatus) return;
+
+                        foreach ($records as $record) {
+                            // If cancelling, return stocks and ingredients similar to cancel action
+                            if ($newStatus === 'cancelled') {
+                                $record->update(['status' => 'cancelled']);
+
+                                foreach ($record->items as $orderDetail) {
+                                    $product = $orderDetail->product;
+
+                                    if ($product) {
+                                        $product->increment('stock', $orderDetail->qty);
+
+                                        if ($product->stock > 0) {
+                                            $product->update(['in_stock' => true]);
+                                        }
+
+                                        if ($product->usesIngredients()) {
+                                            foreach ($product->ingredients as $ingredient) {
+                                                $quantityToReturn = $ingredient->pivot->quantity * $orderDetail->qty;
+                                                $ingredient->increment('stock', $quantityToReturn);
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                $record->update(['status' => $newStatus]);
+                            }
+                        }
                     })
                     ->deselectRecordsAfterCompletion(),
 

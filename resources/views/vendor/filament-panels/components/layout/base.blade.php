@@ -102,6 +102,8 @@
 
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::HEAD_END, scopes: $livewire->getRenderHookScopes()) }}
 @PwaHead
+<script src="https://cdn.jsdelivr.net/npm/qz-tray@2.2.4/qz-tray.js"></script>
+<script src="{{ asset('js/qz-print.js') }}"></script>
 
     </head>
 
@@ -123,6 +125,67 @@
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::SCRIPTS_BEFORE, scopes: $livewire->getRenderHookScopes()) }}
 
         @filamentScripts(withCore: true)
+
+<script>
+    // 🔍 TEST EVENT order-paid
+    window.addEventListener('order-paid', (e) => {
+        console.log('✅ ORDER PAID EVENT FIRED', e.detail);
+    });
+</script>
+
+<script>
+    qz.security.setCertificatePromise(function (resolve, reject) {
+        resolve("-----BEGIN CERTIFICATE-----\nDEV\n-----END CERTIFICATE-----");
+    });
+
+    qz.security.setSignaturePromise(function (toSign) {
+        return function (resolve, reject) {
+            resolve();
+        };
+    });
+</script>
+
+<script>
+window.addEventListener('order-paid', async (event) => {
+    const order = event.detail?.order;
+    if (!order) return;
+
+    try {
+        if (!qz.websocket.isActive()) {
+            await qz.websocket.connect();
+        }
+
+        const config = qz.configs.create("POS-58"); // GANTI NAMA PRINTER
+
+        const data = [
+            '\x1B\x40',
+            '\x1B\x61\x01',
+            'SEUMPAMA BUNGA\n',
+            '\x1B\x61\x00',
+            '--------------------------\n',
+        ];
+
+        order.items.forEach(item => {
+            data.push(`${item.name}  ${item.qty} x ${item.price}\n`);
+        });
+
+        data.push(
+            '--------------------------\n',
+            `TOTAL : ${order.total}\n`,
+            '\n\n',
+            '\x1D\x56\x00'
+        );
+
+        await qz.print(config, data);
+
+    } catch (err) {
+        alert('Printer tidak terhubung');
+        console.error(err);
+    }
+});
+</script>
+
+</script>
 
         @if (filament()->hasBroadcasting() && config('filament.broadcasting.echo'))
             <script data-navigate-once>

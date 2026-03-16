@@ -11,6 +11,13 @@
 @php
     $sidebarCollapsible = $sidebarCollapsible && filament()->isSidebarCollapsibleOnDesktop();
     $hasDropdown = filled($label) && filled($icon) && $sidebarCollapsible;
+    // Normalize and guard items to avoid heavy loops or unexpected iterables causing timeouts
+    $items = is_iterable($items) ? collect($items)->values()->all() : [];
+    $maxSidebarItems = config('filament.panels.max_sidebar_items', 500);
+    if (count($items) > $maxSidebarItems) {
+        \Log::warning('Sidebar items truncated', ['label' => $label ?? null, 'count' => count($items), 'max' => $maxSidebarItems]);
+        $items = array_slice($items, 0, $maxSidebarItems);
+    }
 @endphp
 
 <li

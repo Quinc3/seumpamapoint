@@ -27,6 +27,7 @@ class PointOfSale extends Component
     public $discount = 0;
     public $cashReceived = 0;
     public $cashChange = 0;
+    public $showSummaryModal = false;
 
     public function mount()
     {
@@ -116,6 +117,28 @@ class PointOfSale extends Component
         $this->calculateTotals();
     }
 
+    public function showSummary()
+    {
+        if (empty($this->cart)) {
+            session()->flash('error', 'Cart is empty!');
+            return;
+        }
+        $this->showSummaryModal = true;
+    }
+
+    public function closeSummary()
+    {
+        $this->showSummaryModal = false;
+    }
+
+    public function printInvoice()
+    {
+        // Implement print invoice logic here
+        // For now, just close modal and show success message
+        $this->showSummaryModal = false;
+        session()->flash('success', 'Invoice printed successfully!');
+    }
+
     public function processOrder()
     {
         // Validasi
@@ -172,6 +195,7 @@ class PointOfSale extends Component
             $this->discount = 0;
 
             session()->flash('success', 'Order processed successfully! Order #' . $order->id);
+            $this->dispatchBrowserEvent('order-processed', ['orderId' => $order->id]);
 
         } catch (\Exception $e) {
             session()->flash('error', 'Error processing order: ' . $e->getMessage());

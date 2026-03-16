@@ -20,7 +20,7 @@ return [
 
     'manifest' => [
         'name' => 'Seumpama Point',
-        'short_name' => 'smpm.int',
+        'short_name' => 'Seumpama Point',
         'background_color' => '#000000',
         'display' => 'fullscreen',
         'description' => 'A Progressive Web Application setup for Laravel projects.',

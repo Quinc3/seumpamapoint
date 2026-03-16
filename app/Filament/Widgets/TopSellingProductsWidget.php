@@ -62,18 +62,18 @@ class TopSellingProductsWidget extends BaseWidget
                 $period = $this->data['period'] ?? 'today';
                 $customDate = $this->data['custom_date'] ?? now()->format('Y-m-d');
 
+                // Use conditional aggregates so products without orders still appear
                 return Product::query()
                     ->select([
                         'products.id',
                         'products.name',
                         'products.price',
                         'products.stock',
-                        DB::raw('COALESCE(SUM(order_details.qty), 0) as total_sold'),
-                        DB::raw('COALESCE(SUM(order_details.subtotal), 0) as total_revenue')
+                        DB::raw("COALESCE(SUM(CASE WHEN orders.status IS NULL OR orders.status != 'cancelled' THEN order_details.qty ELSE 0 END), 0) as total_sold"),
+                        DB::raw("COALESCE(SUM(CASE WHEN orders.status IS NULL OR orders.status != 'cancelled' THEN order_details.subtotal ELSE 0 END), 0) as total_revenue")
                     ])
                     ->leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
                     ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
-                    ->where('orders.status', '!=', 'cancelled') // ⬅️ TAMBAHKAN INI - exclude cancelled orders
                     ->when($period === 'today', function (Builder $query) {
                         $query->whereDate('orders.created_at', today());
                     })

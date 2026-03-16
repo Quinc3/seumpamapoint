@@ -55,9 +55,6 @@ class TestPrint extends Command
             $testCommand = 'echo "Hello Printer Test"';
         }
         
-        $output = shell_exec($testCommand);
-        $this->info('Shell test output: ' . ($output ? trim($output) : 'NO OUTPUT'));
-        
         // Test actual printing
         $this->info('Testing actual print...');
         $printService = new ThermalPrintService();

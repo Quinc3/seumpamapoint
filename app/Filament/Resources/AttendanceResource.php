@@ -2,21 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Attendance;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Filament\Forms;
+use Filament\Tables;
 use Filament\Forms\Form;
+use App\Models\Attendance;
+use Filament\Tables\Table;
+use Filament\Tables\Actions;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Actions;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\AttendanceResource\Pages;
-use Illuminate\Database\Eloquent\Builder;
 
 class AttendanceResource extends Resource
 {
@@ -62,7 +63,7 @@ class AttendanceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->defaultSort('created_at', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Name')
@@ -150,7 +151,7 @@ class AttendanceResource extends Resource
                 TextColumn::make('longitude')
                     ->label('Long')
                     ->toggleable(isToggledHiddenByDefault: true),
-                    
+
             ])
             ->filters([
                 // Add status filter
@@ -176,6 +177,60 @@ class AttendanceResource extends Resource
                     ->label('Early Leavers')
                     ->query(fn($query) => $query->where('status', 'early_leave')),
             ])
+
+            ->headerActions([
+    Tables\Actions\Action::make('downloadReport')
+        ->label('Download Report')
+        ->icon('heroicon-o-document-arrow-down')
+        ->color('success')
+        ->form([
+            Select::make('report_type')
+                ->options([
+                    'daily' => 'Daily',
+                    'monthly' => 'Monthly',
+                    'custom' => 'Custom',
+                ])
+                ->required()
+                ->reactive(),
+
+            DatePicker::make('date')
+                ->visible(fn($get) => $get('report_type') === 'daily'),
+
+            Select::make('month')
+                ->options([
+                    1 => 'January', 2 => 'February', 3 => 'March',
+                    4 => 'April', 5 => 'May', 6 => 'June',
+                    7 => 'July', 8 => 'August', 9 => 'September',
+                    10 => 'October', 11 => 'November', 12 => 'December',
+                ])
+                ->visible(fn($get) => $get('report_type') === 'monthly'),
+
+            Select::make('year')
+                ->options([
+                    2024 => '2024',
+                    2025 => '2025',
+                ])
+                ->visible(fn($get) => $get('report_type') === 'monthly'),
+
+            DatePicker::make('start_date')
+                ->visible(fn($get) => $get('report_type') === 'custom'),
+
+            DatePicker::make('end_date')
+                ->visible(fn($get) => $get('report_type') === 'custom'),
+
+            Select::make('format')
+                ->options([
+                    'pdf' => 'PDF',
+                    'excel' => 'Excel',
+                ])
+                ->default('pdf'),
+        ])
+        ->action(fn(array $data) =>
+            redirect()->route('attendance.report.download', $data)
+        ),
+])
+
+
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -185,7 +240,7 @@ class AttendanceResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-                
+
             ]);
     }
 
@@ -210,5 +265,24 @@ class AttendanceResource extends Resource
         return [
             'index' => Pages\ListAttendances::route('/'),
         ];
+    }
+
+    // Role-based permissions untuk UserResource
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasRole('admin');
+    }
+
+    public static function canEdit($record): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasRole('admin');
+    }
+
+    public static function canDelete($record): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasRole('admin');
     }
 }

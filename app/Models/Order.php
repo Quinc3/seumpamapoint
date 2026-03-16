@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Events\OrderPaid;
+use App\Models\OrderDetail;
 
 class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'customer_name',
         'total_price',
         'discount',
@@ -33,66 +34,54 @@ class Order extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function orderDetails(): HasMany
+    /**
+     * RELASI ORDER → ITEMS
+     */
+    public function items(): HasMany
     {
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasMany(OrderDetail::class, 'order_id');
     }
 
-    public function orderdetail(): HasMany
-    {
-        return $this->hasMany(OrderDetail::class);
-    }
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
-
-
-    protected static function booted()
-    {
-        static::updated(function ($order) {
-            // Cek jika payment_status berubah menjadi 'paid'
-            if ($order->isDirty('payment_status') && $order->payment_status === 'paid') {
-                \Log::info('Order payment status changed to paid, triggering auto-print for order: ' . $order->id);
-                event(new OrderPaid($order));
-            }
-        });
-    }
-
-    // Helper method untuk cek perubahan status
-    public function wasRecentlyPaid(): bool
-    {
-        return $this->isDirty('payment_status') && $this->payment_status === 'paid';
-    }
-
-
-    // Helper method to calculate totals - FIXED TYPE CONVERSION
+    /**
+     * HITUNG TOTAL
+     */
     public function calculateTotals(): void
     {
-        $subtotal = $this->orderDetails->sum(function ($detail) {
-            return (float) $detail->price * (int) $detail->qty;
-        });
+        $this->loadMissing('items');
 
-        // Explicit type conversion
-        $this->total_price = (float) $subtotal;
-        $this->discount_amount = (float) ($subtotal * ((float) $this->discount / 100));
-        $this->total_payment = (float) ($subtotal - $this->discount_amount);
+        $subtotal = $this->items->sum(
+            fn($item) =>
+            (float) $item->price * (int) $item->qty
+        );
+
+        $this->total_price = $subtotal;
+        $this->discount_amount = $subtotal * ($this->discount / 100);
+        $this->total_payment = max(0, $subtotal - $this->discount_amount);
     }
 
-    // Accessor untuk format display
-    public function getTotalPriceFormattedAttribute()
+    /**
+     * FORMAT DISPLAY
+     */
+    public function getTotalPriceFormattedAttribute(): string
     {
         return 'IDR ' . number_format($this->total_price, 0, ',', '.');
     }
 
-    public function getDiscountAmountFormattedAttribute()
+    public function getDiscountAmountFormattedAttribute(): string
     {
         return 'IDR ' . number_format($this->discount_amount, 0, ',', '.');
     }
 
-    public function getTotalPaymentFormattedAttribute()
+    public function getTotalPaymentFormattedAttribute(): string
     {
         return 'IDR ' . number_format($this->total_payment, 0, ',', '.');
     }
+
+    // User relation
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+
 }

@@ -2,51 +2,60 @@
 
 namespace App\Filament\Pages\Auth;
 
+use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as BaseLogin;
-use Filament\Facades\Filament;
-use Filament\Panel;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Component;
 
 class CustomLogin extends BaseLogin
 {
-    protected function getLayoutData(): array
-    {
-        $data = parent::getLayoutData();
-        
-        // Tambahkan CSS melalui data
-        $data['styles'] = array_merge($data['styles'] ?? [], [
-            $this->getBackgroundStyles()
-        ]);
-        
-        return $data;
-    }
-    
-    protected function getBackgroundStyles(): string
-    {
+    protected static string $view = 'filament.pages.auth.custom-login';
 
-        $bgImage = asset('images/login-background.jpg');
-        
-        return <<<CSS
-        <style>
-            /* Background untuk halaman login */
-            body.filament-login-page {
-                background: 
-                    linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('{$bgImage}') !important;
-                background-size: cover !important;
-                background-position: center !important;
-                background-repeat: no-repeat !important;
-                min-height: 100vh !important;
-            }
-            
-            /* Styling untuk card login */
-            .fi-simple-page .fi-simple-main {
-                background: rgba(255, 255, 255, 0.95) !important;
-                backdrop-filter: blur(10px) !important;
-                border-radius: 16px !important;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
-                border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            }
-        </style>
-        CSS;
+    public function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                $this->getEmailFormComponent(),
+                $this->getPasswordFormComponent(),
+                $this->getRememberFormComponent(),
+            ])
+            ->statePath('data');
+    }
+
+    protected function getEmailFormComponent(): Component
+    {
+        return TextInput::make('email')
+            ->label(__('filament-panels::pages/auth/login.form.email.label'))
+            ->email()
+            ->required()
+            ->autocomplete()
+            ->autofocus()
+            ->placeholder('nama@example.com');
+    }
+
+    protected function getPasswordFormComponent(): Component
+    {
+        return TextInput::make('password')
+            ->label(__('filament-panels::pages/auth/login.form.password.label'))
+            ->password()
+            ->required()
+            ->autocomplete('current-password');
+    }
+
+    protected function getRememberFormComponent(): Component
+    {
+        return Checkbox::make('remember')
+            ->label(__('filament-panels::pages/auth/login.form.remember.label'));
+    }
+
+    public function getHeading(): string
+    {
+        return __('filament-panels::pages/auth/login.title');
+    }
+
+    public function getSubheading(): ?string
+    {
+        return 'Silakan masukkan kredensial Anda';
     }
 }

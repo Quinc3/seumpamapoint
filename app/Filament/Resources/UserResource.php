@@ -31,17 +31,21 @@ class UserResource extends Resource
                             ->email()
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\Select::make('roles')
-                            ->relationship('roles', 'name')
+                        Forms\Components\Select::make('role')
+                            ->label('Role')
                             ->required()
-                            ->preload()
-                            ->searchable()
                             ->options([
                                 'admin' => 'Admin',
                                 'cashier' => 'Cashier',
                             ])
+                            ->afterStateHydrated(function ($set, $record) {
+                                if ($record) {
+                                    $set('role', $record->roles->first()?->name);
+                                }
+                            })
                             ->default('cashier')
-                            ->native(false),
+                            ->searchable(false),
+
                     ])->columns(2),
 
                 Forms\Components\Section::make('Security')
