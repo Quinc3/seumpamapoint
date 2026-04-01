@@ -1,179 +1,44 @@
-# Laravel Project Setup Guide
+# 🧾 Seumpama Point — Point of Sale System
 
-Dokumen ini menjelaskan **langkah-langkah menjalankan project Laravel ini setelah dicopy atau di-clone ke komputer lain**.
+## 📌 Overview
+Seumpama Point is a web-based Point of Sale (POS) system designed to manage product sales, transactions, and basic business operations efficiently.
 
----
+This system focuses on simplifying the cashier workflow while providing structured transaction records for monitoring and decision-making.
 
-## 1. Prasyarat
+## 🎯 Purpose
+This project was built to:
+- Streamline sales transactions
+- Manage product data efficiently
+- Provide clear transaction records
+- Support small to medium business operations
 
-Pastikan environment sudah memenuhi kebutuhan berikut:
+## ✨ Features
+- 🛒 Transaction Management (Sales System)
+- 📦 Product Management (CRUD)
+- 💰 Automatic Total Calculation
+- 🧾 Transaction History
+- 🔐 Authentication System (Admin / Cashier)
 
-- PHP >= 8.1  
-- Composer  
-- Node.js & npm  
-- Database (MySQL / MariaDB / sesuai konfigurasi)
-- Git (opsional, tapi sangat disarankan)
-- Docker & Docker Compose (jika menggunakan Docker)
+## 👥 User Roles
+### 🔐 Admin
+- Manage products
+- View all transactions
+- Monitor system usage
 
----
+### 👨‍💼 Cashier
+- Process sales transactions
+- Input product purchases
+- View transaction history
 
-## 2. File yang Tidak Ikut Dicopy
+## 🛠️ Tech Stack
+- **Backend:** Laravel
+- **Frontend:** Blade (MVC)
+- **Database:** MySQL
+- **Styling:** Bootstrap / Custom CSS
 
-Secara default, file/folder berikut **tidak disertakan** dan harus digenerate ulang:
+## ⚙️ Installation & Setup
 
-```
-vendor/
-node_modules/
-.env
-```
-
-Tujuan:
-- Menghindari konflik sistem
-- Menjaga keamanan credential
-- Menyesuaikan dependency dengan environment lokal
-
----
-
-## 3. Instalasi Backend (Laravel)
-
-Masuk ke root project, lalu jalankan:
-
+1. Clone repository
 ```bash
-composer install
-```
-
-Pastikan versi PHP dan extension sudah sesuai jika terjadi error.
-
----
-
-## 4. Setup Environment (.env)
-
-Buat file `.env` dari template:
-
-```bash
-cp .env.example .env
-```
-
-Sesuaikan konfigurasi utama:
-
-```env
-APP_NAME=Laravel
-APP_ENV=local
-APP_DEBUG=true
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=nama_database
-DB_USERNAME=username
-DB_PASSWORD=password
-```
-
----
-
-## 5. Generate Application Key
-
-Langkah ini **WAJIB** dilakukan:
-
-```bash
-php artisan key:generate
-```
-
-Tanpa key, aplikasi akan error (500).
-
----
-
-## 6. Instalasi Frontend (Vite)
-
-Jika project menggunakan Vite / Tailwind / Vue / React:
-
-```bash
-npm install
-npm run dev
-```
-
-Untuk build production:
-
-```bash
-npm run build
-```
-
----
-
-## 7. Setup Database
-
-Jika database belum tersedia:
-
-```bash
-php artisan migrate
-```
-
-Jika menggunakan seeder:
-
-```bash
-php artisan db:seed
-```
-
-Pastikan database sudah dibuat terlebih dahulu.
-
----
-
-## 8. Menjalankan Aplikasi
-
-```bash
-php artisan serve
-```
-
-Aplikasi dapat diakses di:
-
-```
-http://127.0.0.1:8000
-```
-
----
-
-## 9. Menjalankan dengan Docker (Opsional)
-
-Jika menggunakan Docker:
-
-```bash
-docker-compose up --build
-```
-
-Pastikan file `.env` sudah sesuai dengan konfigurasi Docker.
-
----
-
-## 10. Catatan Penting
-
-- Jangan pernah meng-commit file `.env`
-- Jangan meng-commit `vendor/` dan `node_modules/`
-- Selalu gunakan `composer.lock` dan `package-lock.json`
-- Bersihkan file non-project sebelum commit
-
----
-
-## 11. Troubleshooting Singkat
-
-**Application key belum ada**
-```bash
-php artisan key:generate
-```
-
-**Permission storage**
-```bash
-chmod -R 775 storage bootstrap/cache
-```
-
-**Vite tidak berjalan**
-```bash
-npm install
-npm run dev
-```
-
----
-
-## 12. Informasi Tambahan
-
-README ini ditujukan untuk kebutuhan development dan deployment internal.
-Silakan sesuaikan jika project masuk tahap production.
+git clone https://github.com/Quinc3/seumpamapoint.git
+cd seumpamapoint
